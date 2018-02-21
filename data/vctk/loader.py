@@ -11,8 +11,8 @@ class loading(Dataset):
 
     def __init__(self, root_dir, transform=None):
        """
-	vctk-speaker1-train.4.16000.8192.4096.h5
-	vctk-speaker1-val.4.16000.8192.4096.h5
+	   vctk-speaker1-train.4.16000.8192.4096.h5
+	   vctk-speaker1-val.4.16000.8192.4096.h5
         Args:
             csv_file (string): Path to the csv file with annotations.
             root_dir (string): Directory with all the images.
