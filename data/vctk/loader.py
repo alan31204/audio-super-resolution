@@ -1,6 +1,14 @@
+from __future__ import print_function, division
+import os
+import torch
+import pandas as pd
+from skimage import io, transform
+import numpy as np
+import matplotlib.pyplot as plt
+from torch.utils.data import Dataset, DataLoader
+from torchvision import transforms, utils
 import h5py
 import numpy
-import torch.utils.data.Dataset
 
 # data loading from PyTorch tutorial
 
@@ -8,17 +16,8 @@ class loading(Dataset):
     # filename = 'vctk-speaker1-train.4.16000.8192.4096.h5'
     root_dir = 'vctk-speaker1-train.4.16000.8192.4096.h5'
 
-
     def __init__(self, root_dir, transform=None):
-       """
-	   vctk-speaker1-train.4.16000.8192.4096.h5
-	   vctk-speaker1-val.4.16000.8192.4096.h5
-        Args:
-            csv_file (string): Path to the csv file with annotations.
-            root_dir (string): Directory with all the images.
-            transform (callable, optional): Optional transform to be applied
-                on a sample.
-        """
+        
         f = h5py.File(root_dir, 'r')
 
 	# List all groups
@@ -31,7 +30,7 @@ class loading(Dataset):
         label = list(f[b_group_key])
 
 	# self.landmarks_frame = pd.read_csv(csv_file)
-        self.root_dir = root_dir
+	self.root_dir = root_dir
 	self.data = data
 	self.label = label
         self.transform = transform
@@ -53,12 +52,15 @@ class loading(Dataset):
         return sample
 
 
-transformed_dataset = loading(transform=transforms.Compose([Rescale(256),RandomCrop(224),ToTensor()]))
+transformed_dataset = loading(root_dir = 'vctk-speaker1-train.4.16000.8192.4096.h5',transform=None)
+#loading(transform=transforms.Compose([Rescale(256),RandomCrop(224),ToTensor()]))
+
+# print(len(transformed_dataset))
 
 for i in range(len(transformed_dataset)):
     sample = transformed_dataset[i]
 
-    print(i, sample['lr'].size(), sample['hr'].size())
+   # print(i, sample['lr'].size(), sample['hr'].size())
 
     if i == 3:
         break
@@ -91,11 +93,11 @@ for i_batch, sample_batched in enumerate(dataloader):
 
     # observe 4th batch and stop.
     if i_batch == 3:
-        plt.figure()
-        show_landmarks_batch(sample_batched)
-        plt.axis('off')
-        plt.ioff()
-        plt.show()
+        #plt.figure()
+        #show_landmarks_batch(sample_batched)
+        #plt.axis('off')
+        #plt.ioff()
+        #plt.show()
         break
 
 
