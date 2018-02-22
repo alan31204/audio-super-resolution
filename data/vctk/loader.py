@@ -62,7 +62,7 @@ for i in range(len(transformed_dataset)):
 
    # print(i, sample['lr'].size(), sample['hr'].size())
 
-    if i == 3:
+    if i == 5:
         break
 
 dataloader = DataLoader(transformed_dataset, batch_size=4,
@@ -92,7 +92,7 @@ for i_batch, sample_batched in enumerate(dataloader):
           sample_batched['hr'].size())
 
     # observe 4th batch and stop.
-    if i_batch == 3:
+    if i_batch == 5:
         #plt.figure()
         #show_landmarks_batch(sample_batched)
         #plt.axis('off')
