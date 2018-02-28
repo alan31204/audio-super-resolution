@@ -10,3 +10,21 @@ import matplotlib.pyplot as plt
 import time
 import os
 # import copy
+
+class AudioNet(Model):
+# Generic PyTorch model training code
+	def __init__(self, from_ckpt=False, n_dim=None, r=2,
+               opt_params=default_opt, log_prefix='./run'):
+    # perform the usual initialization
+    self.r = r
+    Model.__init__(self, from_ckpt=from_ckpt, n_dim=n_dim, r=r,
+                   opt_params=opt_params, log_prefix=log_prefix)
+
+    def reate_model(self, n_dim, r):
+
+
+
+
+
+
+    def predict(self, X):	
