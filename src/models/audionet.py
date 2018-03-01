@@ -11,10 +11,14 @@ import time
 import os
 # import copy
 
-class AudioNet(Model):
+class AudioNet(torch.nn.Module):
 # Generic PyTorch model training code
-	def __init__(self, from_ckpt=False, n_dim=None, r=2,
-               opt_params=default_opt, log_prefix='./run'):
+	# def __init__(self, from_ckpt=False, n_dim=None, r=2, opt_params=default_opt, log_prefix='./run'):
+	def __init__(self, block, layers):
+		super(AudioNet, self).__init__()
+		self.in_channels = 16
+		
+
     # perform the usual initialization
     self.r = r
     Model.__init__(self, from_ckpt=from_ckpt, n_dim=n_dim, r=r,
