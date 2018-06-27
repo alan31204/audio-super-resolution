@@ -17,7 +17,8 @@ import math
 # Pytorch Official ResNet sample model
 # read Wavenet paper, and understand its structures
 
-
+__all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
+           'resnet152']
 
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
@@ -34,17 +35,15 @@ def conv3x3(in_planes, out_planes, stride=1):
                      padding=1, bias=False)
 
 
-# ResNet Basic Block model
-class BasicBlock(nn.Module):
+# ResNet Downsample Basic Block model
+class DBasicBlock(nn.Module):
     expansion = 1
 
     def __init__(self, inplanes, planes, stride=1, downsample=None):
-        super(BasicBlock, self).__init__()
+        super(DBasicBlock, self).__init__()
         self.conv1 = conv3x3(inplanes, planes, stride)
         self.bn1 = nn.BatchNorm2d(planes)
         self.relu = nn.ReLU(inplace=True)
-        self.conv2 = conv3x3(planes, planes)
-        self.bn2 = nn.BatchNorm2d(planes)
         self.downsample = downsample
         self.stride = stride
 
@@ -55,9 +54,6 @@ class BasicBlock(nn.Module):
         out = self.bn1(out)
         out = self.relu(out)
         
-        out = self.conv2(out)
-        out = self.bn2(out)
-
         if self.downsample is not None:
             residual = self.downsample(x)
 
@@ -65,6 +61,41 @@ class BasicBlock(nn.Module):
         out = self.relu(out)
 
         return out
+
+
+# ResNet Upsample Basic Block model
+class UBasicBlock(nn.Module):
+    expansion = 1
+
+    def __init__(self, inplanes, planes, stride=1, upsample=None):
+        super(UBasicBlock, self).__init__()
+        self.conv1 = conv3x3(inplanes, planes, stride)
+        self.bn1 = nn.BatchNorm2d(planes)
+        self.relu = nn.ReLU(inplace=True)
+        # DimShuffle
+        # Stacking
+        self.upsample = upsample
+        self.stride = stride
+
+    def forward(self, x):
+        residual = x
+
+        function = nn.Dropout(p=0.5)
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+        out = function(out)
+        # DimShuffle
+        # Stacking
+        
+        if self.upsample is not None:
+            residual = self.upsample(x)
+
+        out += residual
+        out = self.relu(out)
+
+        return out
+
 
 # ResNet Bottleneck architecture
 class Bottleneck(nn.Module):
