@@ -43,7 +43,8 @@ class DBasicBlock(nn.Module):
         super(DBasicBlock, self).__init__()
         self.conv1 = conv3x3(inplanes, planes, stride)
         self.bn1 = nn.BatchNorm2d(planes)
-        self.relu = nn.ReLU(inplace=True)
+        self.relu = nn.LeakyReLU(0.2)
+        # self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
         self.stride = stride
 
@@ -52,11 +53,12 @@ class DBasicBlock(nn.Module):
 
         out = self.conv1(x)
         out = self.bn1(out)
-        out = self.relu(out)
+        # out = self.relu(out)
         
         if self.downsample is not None:
             residual = self.downsample(x)
 
+        # not sure
         out += residual
         out = self.relu(out)
 
@@ -71,21 +73,21 @@ class UBasicBlock(nn.Module):
         super(UBasicBlock, self).__init__()
         self.conv1 = conv3x3(inplanes, planes, stride)
         self.bn1 = nn.BatchNorm2d(planes)
+        self.drop = nn.Dropout(p=0.5)
         self.relu = nn.ReLU(inplace=True)
-        # DimShuffle
-        # Stacking
+        self.pixel_shuffle = nn.PixelShuffle()
+
         self.upsample = upsample
         self.stride = stride
 
     def forward(self, x):
         residual = x
 
-        function = nn.Dropout(p=0.5)
         out = self.conv1(x)
-        out = self.bn1(out)
+        # out = self.bn1(out)
+        out = self.drop(x)
         out = self.relu(out)
-        out = function(out)
-        # DimShuffle
+        out = self.pixel_shuffle(out)
         # Stacking
         
         if self.upsample is not None:
@@ -105,12 +107,14 @@ class Bottleneck(nn.Module):
         super(Bottleneck, self).__init__()
         self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
-        self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride,
-                               padding=1, bias=False)
-        self.bn2 = nn.BatchNorm2d(planes)
-        self.conv3 = nn.Conv2d(planes, planes * self.expansion, kernel_size=1, bias=False)
-        self.bn3 = nn.BatchNorm2d(planes * self.expansion)
-        self.relu = nn.ReLU(inplace=True)
+        # self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride,
+        #                        padding=1, bias=False)
+        # self.bn2 = nn.BatchNorm2d(planes)
+        # self.conv3 = nn.Conv2d(planes, planes * self.expansion, kernel_size=1, bias=False)
+        # self.bn3 = nn.BatchNorm2d(planes * self.expansion)
+
+        self.drop = nn.Dropout(p=0.5)
+        self.relu = nn.LeakyReLU(0.2)
         self.downsample = downsample
         self.stride = stride
 
@@ -119,14 +123,15 @@ class Bottleneck(nn.Module):
 
         out = self.conv1(x)
         out = self.bn1(out)
+        out = self.drop(out)
         out = self.relu(out)
 
-        out = self.conv2(out)
-        out = self.bn2(out)
-        out = self.relu(out)
+        # out = self.conv2(out)
+        # out = self.bn2(out)
+        # out = self.relu(out)
 
-        out = self.conv3(out)
-        out = self.bn3(out)
+        # out = self.conv3(out)
+        # out = self.bn3(out)
 
         if self.downsample is not None:
             residual = self.downsample(x)
@@ -140,8 +145,14 @@ class AudioNet(nn.Module):
 # Generic PyTorch model training code
 	# def __init__(self, from_ckpt=False, n_dim=None, r=2, opt_params=default_opt):
 
-	def __init__(self, block, layers):
-	# 	super(AudioNet, self).__init__()
+	def __init__(self, block, layers, num_classes=1000):
+        self.inplanes = 64
+		super(AudioNet, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
+                               bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
+        self.relu = nn.ReLU(inplace=True)
+        # maxpool ?
 	# 	self.in_channels = 16
 		
 
@@ -152,11 +163,41 @@ class AudioNet(nn.Module):
 
 
 
-    def create_model(self, n_dim, r):
+    def _make_layer(self, block, planes, blocks, stride=1):
+        downsample = None
+        if stride != 1 or self.inplanes != planes * block.expansion:
+            downsample = nn.Sequential(
+                nn.Conv2d(self.inplanes, planes * block.expansion,
+                          kernel_size=1, stride=stride, bias=False),
+                nn.BatchNorm2d(planes * block.expansion),
+            )
+
+        layers = []
+        layers.append(block(self.inplanes, planes, stride, downsample))
+        self.inplanes = planes * block.expansion
+        for i in range(1, blocks):
+            layers.append(block(self.inplanes, planes))
+
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.maxpool(x)
+
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.layer3(x)
+        x = self.layer4(x)
+
+        x = self.avgpool(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
+
+        return x
 
 
 
 
 
-
-    def predict(self, X):	
