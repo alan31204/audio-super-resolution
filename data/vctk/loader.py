@@ -99,9 +99,9 @@ for i_batch, sample_batched in enumerate(dataloader):
         #plt.ioff()
         #plt.show()
         break
-        
-try:
-    FileNotFoundError
-except NameError:
-    FileNotFoundError = IOError
+
+    try:
+        FileNotFoundError
+    except NameError:
+        FileNotFoundError = IOError
 
