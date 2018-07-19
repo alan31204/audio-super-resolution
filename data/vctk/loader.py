@@ -92,7 +92,7 @@ for i_batch, sample_batched in enumerate(dataloader):
           sample_batched['hr'].size())
 
     # observe 4th batch and stop.
-    if i_batch == 2:
+    if i_batch == 5:
         #plt.figure()
         #show_landmarks_batch(sample_batched)
         #plt.axis('off')
