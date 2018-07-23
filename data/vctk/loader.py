@@ -31,8 +31,8 @@ class loading(Dataset):
 
 	# self.landmarks_frame = pd.read_csv(csv_file)
     self.root_dir = root_dir
-	self.data = data
-	self.label = label
+    self.data = data
+    self.label = label
     self.transform = transform
 
     def __len__(self):
