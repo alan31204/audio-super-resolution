@@ -30,10 +30,10 @@ class loading(Dataset):
         label = list(f[b_group_key])
 
 	# self.landmarks_frame = pd.read_csv(csv_file)
-    self.root_dir = root_dir
-    self.data = data
-    self.label = label
-    self.transform = transform
+        self.root_dir = root_dir
+        self.data = data
+        self.label = label
+        self.transform = transform
 
     def __len__(self):
         return len(self.data)
