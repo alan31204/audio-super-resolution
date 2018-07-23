@@ -19,7 +19,7 @@ def train(args):
 
 
 # make and create model for training and evaluating
-def get_model(args, n_dim, r, from_ckpt=False, train=True):
+def get_model(args, n_dim, r, train=True):
 
 
 
