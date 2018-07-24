@@ -1,4 +1,5 @@
 import os, sys
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 os.sys.path.append(os.path.abspath('.'))
 os.sys.path.append(os.path.dirname(os.path.abspath('.')))
 
@@ -10,12 +11,23 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 from torchvision import datasets, transforms
+from torch.autograd import Variable
+from torch.optim.lr_scheduler import StepLR
 # from models.model import default_opt
 from models import AudioNet
 from models.io import load_h5, upsample_wav
+from data.vctk import *
+import time
+
 
 # TODO list for training the model
 # From Kuleshov's run.py
+
+# parsing
+
+
+
+
 
 # processing 
 def make_parser():
@@ -67,33 +79,41 @@ def make_parser():
 # training process 
 def train(args):
 	# get data
+	root_dir = '../data/vctk/vctk-speaker1-train.4.16000.8192.4096.h5'
+	# val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
   	X_train, Y_train = load_h5(args.train)
  	X_val, Y_val = load_h5(args.val)
+ 	dataset = loading(root_dir, transform=None)
+ 	nb_batch = dataset.__len__()
+ 	epoch_l = []
+ 	# start training process
+ 	for epoch in range(args.epochs):
+ 		epoch_loss = 0
+        n = 0
+        start = time.time()
+
+
 
 
 def eval(args):
 
 
 
+# model
+
+
+
 
 # make and create model for training and evaluating
-def get_model(args, num_classes, train=True):
-	"""Create a model based on arguments"""  
-  	if train:
-    	opt_params = { 'alg' : args.alg, 'lr' : args.lr, 'b1' : 0.9, 'b2' : 0.999,
-                   'batch_size': args.batch_size, 'layers': args.layers }
+# def get_model(args, num_classes, train=True):
+  	# if train:
+   #  	opt_params = { 'alg' : args.alg, 'lr' : args.lr, 'b1' : 0.9, 'b2' : 0.999,
+   #                 'batch_size': args.batch_size, 'layers': args.layers }
   	# SGD optimizer
-  	# else: 
-   #  	opt_params = default_opt
-
-  	# create model
 
   	# model = models.AudioNet(num_classes=num_classes, r=r, 
     #                             opt_params=opt_params, log_prefix=args.logname)
-  	return model
-
-
-
+  	# return model
 
 
 
@@ -101,7 +121,12 @@ def main():
   parser = make_parser()
 
   args = parser.parse_args()
-  use_cuda = torch.cuda.is_available()
+  # use_cuda = torch.cuda.is_available()
+
+  # model setup
+  model = AudioNet(num_classes=1000)
+  model.cuda()
+  loss_function = nn.MSELoss()
   optimizer = optim.Adam(net_model.parameters(), lr=1e-3)
   args.func(args)
 

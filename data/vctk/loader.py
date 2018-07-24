@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, utils
 import h5py
-import numpy
+import time
+
 
 # data loading from PyTorch tutorial
 
