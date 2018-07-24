@@ -39,7 +39,7 @@ class AudioNet(nn.Module):
 # Generic PyTorch model training code
     # def __init__(self, from_ckpt=False, n_dim=None, r=2, opt_params=default_opt):
 
-    def __init__(self, num_classes=1000):
+    def __init__(self, num_classes=1000, log_name ='./run'):
         # self.inplanes = 64
         super(AudioNet, self).__init__()
         self.dconv1 = DLayer(128, 128, 65, stride=2, 32)

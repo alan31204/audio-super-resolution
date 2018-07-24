@@ -18,72 +18,76 @@ from models import AudioNet
 from models.io import load_h5, upsample_wav
 from data.vctk import *
 import time
+random.seed(123)
 
 
 # TODO list for training the model
 # From Kuleshov's run.py
 
 # parsing
+parser = argparse.ArgumentParser(description='Audio Super Resolution')
+# subparsers = parser.add_subparsers(title='Commands')
+
+# train
+
+# train_parser = subparsers.add_parser('train')
+parser.set_defaults(func=train)
+
+parser.add_argument('--train', required=False, 
+	help='path to h5 archive of training patches')
+parser.add_argument('--val', required=False,
+	help='path to h5 archive of validation set patches')
+parser.add_argument('-e', '--epochs', type=int, default=100,
+	help='number of epochs to train')
+parser.add_argument('--batch-size', type=int, default=128,
+	help='training batch size')
+parser.add_argument('--logname', default='tmp-run',
+	help='folder where logs will be stored')
+parser.add_argument('--layers', default=4, type=int,
+	help='number of layers in each of the D and U halves of the network')
+parser.add_argument('--alg', default='adam',
+	help='optimization algorithm')
+parser.add_argument('--lr', default=1e-3, type=float,
+	help='learning rate')
+parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
+    help='momentum')
+
+# eval
+
+# eval_parser = subparsers.add_parser('eval')
+# eval_parser.set_defaults(func=eval)
+
+# eval_parser.add_argument('--logname', required=Trues,
+# 	help='path to training checkpoint')
+# eval_parser.add_argument('--out-label', default='',
+# 	help='append label to output samples')
+# eval_parser.add_argument('--wav-file-list', 
+# 	help='list of audio files for evaluation')
+# eval_parser.add_argument('--r', help='upscaling factor', type=int)
+# eval_parser.add_argument('--sr', help='high-res sampling rate', 
+# 	type=int, default=16000)
+
+args = parser.parse_args()
+print(args)
+
+# model building
+model = AudioNet(num_classes=1000)
+model.cuda()
+loss_function = nn.MSELoss()
+optimizer = optim.Adam(net_model.parameters(), lr=1e-3)
 
 
-
-
-
-# processing 
-def make_parser():
-	parser = argparse.ArgumentParser(description='ASR')
-  	subparsers = parser.add_subparsers(title='Commands')
-
-  	# train
-
-	train_parser = subparsers.add_parser('train')
-	train_parser.set_defaults(func=train)
-
-	train_parser.add_argument('--train', required=True,
-	    help='path to h5 archive of training patches')
-	train_parser.add_argument('--val', required=True,
-	    help='path to h5 archive of validation set patches')
-	train_parser.add_argument('-e', '--epochs', type=int, default=100,
-	    help='number of epochs to train')
-	train_parser.add_argument('--batch-size', type=int, default=128,
-	    help='training batch size')
-	train_parser.add_argument('--logname', default='tmp-run',
-	    help='folder where logs will be stored')
-	train_parser.add_argument('--layers', default=4, type=int,
-	    help='number of layers in each of the D and U halves of the network')
-	train_parser.add_argument('--alg', default='adam',
-	    help='optimization algorithm')
-	train_parser.add_argument('--lr', default=1e-3, type=float,
-	    help='learning rate')
-	train_parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
-                    help='momentum')
-
-	  # eval
-
-	eval_parser = subparsers.add_parser('eval')
-	eval_parser.set_defaults(func=eval)
-
-	eval_parser.add_argument('--logname', required=True,
-	    help='path to training checkpoint')
-	eval_parser.add_argument('--out-label', default='',
-	    help='append label to output samples')
-	eval_parser.add_argument('--wav-file-list', 
-	    help='list of audio files for evaluation')
-	eval_parser.add_argument('--r', help='upscaling factor', type=int)
-	eval_parser.add_argument('--sr', help='high-res sampling rate', 
-	                                   type=int, default=16000)
-	
-	return parser
 
 
 # training process 
-def train(args):
+def train(args, model):
 	# get data
 	root_dir = '../data/vctk/vctk-speaker1-train.4.16000.8192.4096.h5'
-	# val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
+	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
   	X_train, Y_train = load_h5(args.train)
  	X_val, Y_val = load_h5(args.val)
  	dataset = loading(root_dir, transform=None)
+ 	valset = loading(val_dir, transform=None)
  	nb_batch = dataset.__len__()
  	epoch_l = []
  	# start training process
@@ -91,11 +95,38 @@ def train(args):
  		epoch_loss = 0
         n = 0
         start = time.time()
+        for batch in range(nb_batch):
+
+        	optimizer.zero_grad()
+        	loss = loss_function(model(X_train), Y_train) # not sure yet
+        	epoch_loss += loss.item()
+        	# epoch_loss += loss.cpu().data.numpy()
+        	loss.backward()
+        	optimizer.step()
+
+        	n = n + 1
+
+
+        end = time.time()
+        epoch_l.append(epoch_loss)
+        print("=== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
 
 
 
 
-def eval(args):
+def eval(args, model):
+	# load model
+	model = get_model(args, 0, args.r, from_ckpt=True, train=False)
+ 	model.load(args.logname) # from default checkpoint
+
+  	if args.wav_file_list:
+    	with open(args.wav_file_list) as f:
+      	for line in f:
+        	try:
+          		print line.strip()
+          		upsample_wav(line.strip(), args, model)
+        	except EOFError:
+          		print 'WARNING: Error reading file:', line.strip()
 
 
 
@@ -118,18 +149,11 @@ def eval(args):
 
 
 def main():
-  parser = make_parser()
+  	
 
-  args = parser.parse_args()
-  # use_cuda = torch.cuda.is_available()
-
-  # model setup
-  model = AudioNet(num_classes=1000)
-  model.cuda()
-  loss_function = nn.MSELoss()
-  optimizer = optim.Adam(net_model.parameters(), lr=1e-3)
-  args.func(args)
+  	
+  	args.func(args)
 
 
 if __name__ == '__main__':
-  main()
+  	main()
