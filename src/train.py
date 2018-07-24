@@ -132,6 +132,11 @@ def eval(args, model):
 
 # model
 
+# Checkpoint for storing training info from superresolution/main.py by Soumith and Alykhan
+def checkpoint(epoch):
+    model_out_path = "model_epoch_{}.pth".format(epoch)
+    torch.save(model, model_out_path)
+    print("Checkpoint saved to {}".format(model_out_path))
 
 
 
@@ -148,12 +153,8 @@ def eval(args, model):
 
 
 
-def main():
-  	
+# def main():
+#   	args.func(args)
 
-  	
-  	args.func(args)
-
-
-if __name__ == '__main__':
-  	main()
+# if __name__ == '__main__':
+#   	main()
