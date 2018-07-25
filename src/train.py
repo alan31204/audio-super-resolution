@@ -105,14 +105,14 @@ def train(args):
 			loss = loss_function(model(X_train), Y_train) # not sure yet
 			epoch_loss += loss.item()
         	# epoch_loss += loss.cpu().data.numpy()
-        	loss.backward()
-        	optimizer.step()
-        	n = n + 1
-
-        end = time.time()
-        epoch_l.append(epoch_loss)
-        print("== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
-        checkpoint(epoch) # store checkpoint
+			loss.backward()
+			optimizer.step()
+			n = n + 1
+		
+		end = time.time()
+		epoch_l.append(epoch_loss)
+		print("== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
+		checkpoint(epoch) # store checkpoint
 
 
 
