@@ -52,7 +52,7 @@ class loading(Dataset):
 
         return sample
 
-
+'''
 transformed_dataset = loading(root_dir = 'vctk-speaker1-train.4.16000.8192.4096.h5',transform=None)
 #loading(transform=transforms.Compose([Rescale(256),RandomCrop(224),ToTensor()]))
 
@@ -66,9 +66,9 @@ for i in range(len(transformed_dataset)):
     if i == 2:
         break
 
-dataloader = DataLoader(transformed_dataset, batch_size=4,
+# dataloader = DataLoader(transformed_dataset, batch_size=4,
                         shuffle=True, num_workers=4)
-
+'''
 
 # Helper function to show a batch
 def show_landmarks_batch(sample_batched):
@@ -90,9 +90,9 @@ def show_landmarks_batch(sample_batched):
 
 
 
-for i_batch, sample_batched in enumerate(dataloader):
-    print(i_batch, sample_batched['lr'].size(),
-          sample_batched['hr'].size())
+# for i_batch, sample_batched in enumerate(dataloader):
+#     print(i_batch, sample_batched['lr'].size(),
+#           sample_batched['hr'].size())
 '''
     # observe 4th batch and stop.
     if i_batch == 3:
