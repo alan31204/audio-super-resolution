@@ -115,9 +115,9 @@ def train(args):
 			X_train = X_train.transpose(0,1)
 			Y_train = Y_train.transpose(0,1)
 			print("X_train size: " , X_train.size())
-			print("X_train dimension: ", X_train[0])
+			print("X_train dimension: ", X_train[1])
 			print("Y_train size: " , Y_train.size())
-			print("Y_train dimension: ", Y_train[0])
+			print("Y_train dimension: ", Y_train[1])
 			model.zero_grad()
 			optimizer.zero_grad()
 			loss = loss_function((model(X_train)), Y_train) # not sure yet
