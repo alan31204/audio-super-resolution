@@ -90,11 +90,11 @@ def train(args):
 	# get data
 	root_dir = '../data/vctk/vctk-speaker1-train.4.16000.8192.4096.h5'
 	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
-	dataset = loading(root_dir, transform=None)
-	valset = loading(val_dir, transform=None)
+	dataset1 = loading(root_dir, transform=None)
+	valset1 = loading(val_dir, transform=None)
 
-	dataset = DataLoader(dataset, batch_size=4, shuffle=True, num_workers=4)
-	valset = DataLoader(valset, batch_size=4, shuffle=True, num_workers=4)
+	dataset = DataLoader(dataset1, batch_size=4, shuffle=True, num_workers=4)
+	valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
 	# dataset = DataLoader(dataset1, batch_size=4,shuffle=True, num_workers=4)
 	nb_batch = dataset.__len__()
 	epoch_l = []
@@ -137,8 +137,8 @@ def eval(args):
 	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
  	# X_val, Y_val = load_h5(args.val)
  	# dataset = loading(root_dir, transform=None)
-	valset = loading(val_dir, transform=None)
-	valset = DataLoader(valset, batch_size=4, shuffle=True, num_workers=4)
+	valset1 = loading(val_dir, transform=None)
+	valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
 	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
 	nb_batch = valset.__len__()
 	with torch.no_grad():
