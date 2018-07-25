@@ -34,7 +34,7 @@ parser = argparse.ArgumentParser(description='Audio Super Resolution')
 parser.set_defaults(func=train)
 
 # parser.add_argument('--model_name', type=str, default='',
-                    # help='model name')
+					# help='model name')
 # parser.add_argument('--train', required=False, 
 # 	help='path to h5 archive of training patches')
 # parser.add_argument('--val', required=False,
@@ -52,7 +52,7 @@ parser.add_argument('--layers', default=4, type=int,
 # parser.add_argument('--lr', default=1e-3, type=float,
 # 	help='learning rate')
 # parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
-#     help='momentum')
+#	 help='momentum')
 
 # eval
 
@@ -104,7 +104,7 @@ def train(args):
 			optimizer.zero_grad()
 			loss = loss_function(model(X_train), Y_train) # not sure yet
 			epoch_loss += loss.item()
-        	# epoch_loss += loss.cpu().data.numpy()
+			# epoch_loss += loss.cpu().data.numpy()
 			loss.backward()
 			optimizer.step()
 			n = n + 1
@@ -131,7 +131,7 @@ def eval(args):
 	nb_batch = valset.__len__()
 	with torch.no_grad():
 		for batch in range(nb_batch):
-            # input, target = batch[0].to(device), batch[1].to(device)
+			# input, target = batch[0].to(device), batch[1].to(device)
 			X_val = valset.data(batch)
 			Y_val = valset.label(batch)
 			prediction = model(X_val)
@@ -144,10 +144,10 @@ def eval(args):
 	with open(args.wav_file_list) as f:
 		for line in f:
 			try:
-          		print line.strip()
-          		upsample_wav(line.strip(), args, model)
-       		except EOFError:
-         		rint 'WARNING: Error reading file:', line.strip()
+				print line.strip()
+				upsample_wav(line.strip(), args, model)
+			except EOFError:
+				print 'WARNING: Error reading file:', line.strip()
 
 
 
@@ -156,7 +156,7 @@ def eval(args):
 # Checkpoint for storing training info from superresolution/main.py by Soumith and Alykhan
 def checkpoint(epoch):
 	model_out_path = "model_epoch_{}.pth".format(epoch)
-    # model_out_path = 'model/' + model_name + ".pth"
+	# model_out_path = 'model/' + model_name + ".pth"
 	torch.save(model, 'epoch/' + model_out_path)
 	print("Checkpoint saved to {}".format(model_out_path))
 
@@ -170,11 +170,11 @@ eval(args)
 # def get_model(args, num_classes, train=True):
   	# if train:
    #  	opt_params = { 'alg' : args.alg, 'lr' : args.lr, 'b1' : 0.9, 'b2' : 0.999,
-   #                 'batch_size': args.batch_size, 'layers': args.layers }
+   #				 'batch_size': args.batch_size, 'layers': args.layers }
   	# SGD optimizer
 
   	# model = models.AudioNet(num_classes=num_classes, r=r, 
-    #                             opt_params=opt_params, log_prefix=args.logname)
+	#							 opt_params=opt_params, log_prefix=args.logname)
   	# return model
 
 
