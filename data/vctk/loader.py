@@ -30,6 +30,12 @@ class loading(Dataset):
         data = list(f[a_group_key])
         label = list(f[b_group_key])
 
+        for entry in data: 
+            entry[1], entry[2] = entry[2], entry[1]
+
+        for entry in label: 
+            entry[1], entry[2] = entry[2], entry[1]
+
 	# self.landmarks_frame = pd.read_csv(csv_file)
         self.root_dir = root_dir
         self.data = data

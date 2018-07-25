@@ -93,9 +93,10 @@ def train(args):
 	dataset1 = loading(root_dir, transform=None)
 	valset1 = loading(val_dir, transform=None)
 
-	dataset = DataLoader(dataset1, batch_size=4, shuffle=True, num_workers=4)
-	valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
-	# dataset = DataLoader(dataset1, batch_size=4,shuffle=True, num_workers=4)
+	# dataset = DataLoader(dataset1, batch_size=4, shuffle=True, num_workers=4)
+	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
+	dataset = dataset1
+	valset = valset1
 	nb_batch = dataset.__len__()
 	epoch_l = []
  	# start training process
@@ -138,7 +139,8 @@ def eval(args):
  	# X_val, Y_val = load_h5(args.val)
  	# dataset = loading(root_dir, transform=None)
 	valset1 = loading(val_dir, transform=None)
-	valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
+	valset = valset1
+	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
 	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
 	nb_batch = valset.__len__()
 	with torch.no_grad():
