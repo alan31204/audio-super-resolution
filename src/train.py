@@ -17,6 +17,7 @@ from torch.optim.lr_scheduler import StepLR
 from models import AudioNet
 from models.io import load_h5, upsample_wav
 from data.vctk.loader import loading
+from torch.utils.data import Dataset, DataLoader
 import time
 # random.seed(123)
 
@@ -89,10 +90,9 @@ def train(args):
 	# get data
 	root_dir = '../data/vctk/vctk-speaker1-train.4.16000.8192.4096.h5'
 	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
-	dataset1 = loading(root_dir, transform=None)
-	valset1 = loading(val_dir, transform=None)
-	dataset = DataLoader(dataset1, batch_size=4,
-                        shuffle=True, num_workers=4)
+	dataset = loading(root_dir, transform=None)
+	valset = loading(val_dir, transform=None)
+	# dataset = DataLoader(dataset1, batch_size=4,shuffle=True, num_workers=4)
 	nb_batch = dataset.__len__()
 	epoch_l = []
  	# start training process
@@ -129,9 +129,8 @@ def eval(args):
 	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
  	# X_val, Y_val = load_h5(args.val)
  	# dataset = loading(root_dir, transform=None)
-	valset1 = loading(val_dir, transform=None)
-	valset = DataLoader(valset1, batch_size=4,
-                        shuffle=True, num_workers=4)
+	valset = loading(val_dir, transform=None)
+	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
 	nb_batch = valset.__len__()
 	with torch.no_grad():
 		for batch in range(nb_batch):
