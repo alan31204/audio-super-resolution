@@ -163,7 +163,7 @@ class ULayer(nn.Module):
         self.bn1 = nn.BatchNorm2d(planes)
         self.drop = nn.Dropout(p=0.5)
         self.relu = nn.ReLU(inplace=True)
-        self.pixel_shuffle = nn.PixelShuffle()
+        self.pixel_shuffle = nn.PixelShuffle(upscale_factor=2)
 
         self.upsample = upsample
         self.stride = stride
@@ -228,7 +228,7 @@ class FinalConv(nn.Module):
         super(FinalConv, self).__init__()
         self.conv1 = nn.Conv1d(inplanes, planes, kernel_size=9, bias=False)
         # self.bn1 = nn.BatchNorm2d(planes)
-        self.pixel_shuffle = nn.PixelShuffle()
+        self.pixel_shuffle = nn.PixelShuffle(upscale_factor=2)
         self.stride = stride
 
     def forward(self, x):
