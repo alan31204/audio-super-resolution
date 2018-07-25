@@ -18,7 +18,7 @@ from models import AudioNet
 from models.io import load_h5, upsample_wav
 from data.vctk import *
 import time
-random.seed(123)
+# random.seed(123)
 
 
 # TODO list for training the model
