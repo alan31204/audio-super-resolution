@@ -53,7 +53,7 @@ class loading(Dataset):
         return sample
 
 
-transformed_dataset = loading(root_dir = 'vctk-speaker1-train.4.16000.8192.4096.h5',transform=None)
+# transformed_dataset = loading(root_dir = 'vctk-speaker1-train.4.16000.8192.4096.h5',transform=None)
 #loading(transform=transforms.Compose([Rescale(256),RandomCrop(224),ToTensor()]))
 
 # print(len(transformed_dataset))
