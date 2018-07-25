@@ -42,23 +42,23 @@ class AudioNet(nn.Module):
     def __init__(self, num_classes=1000, log_name ='./run'):
         # self.inplanes = 64
         super(AudioNet, self).__init__()
-        self.dconv1 = DLayer(128, 128, 65, stride=2, padding=32)
-        self.dconv2 = DLayer(256, 256, 33, stride=2, padding=16)
-        self.dconv3 = DLayer(512, 512, 17, stride=2, padding=8)
-        self.dconv4 = DLayer(512, 512, 9, stride=2, padding=4)
-        self.dconv5 = DLayer(512, 512, 9, stride=2, padding=4)
-        self.dconv6 = DLayer(512, 512, 9, stride=2, padding=4)
-        self.dconv7 = DLayer(512, 512, 9, stride=2, padding=4)
-        self.dconv8 = DLayer(512, 512, 9, stride=2, padding=4)
+        self.dconv1 = DLayer(128, 128, 65, 32, stride=2)
+        self.dconv2 = DLayer(256, 256, 33, 16, stride=2)
+        self.dconv3 = DLayer(512, 512, 17, 8, stride=2)
+        self.dconv4 = DLayer(512, 512, 9, 4, stride=2)
+        self.dconv5 = DLayer(512, 512, 9, 4, stride=2)
+        self.dconv6 = DLayer(512, 512, 9, 4, stride=2)
+        self.dconv7 = DLayer(512, 512, 9, 4, stride=2)
+        self.dconv8 = DLayer(512, 512, 9, 4, stride=2)
         self.bneck1 = Bottleneck(512, 512, stride=2)
-        self.uconv1 = ULayer(512, 512, 9, stride=1, padding=4)
-        self.uconv2 = ULayer(512, 512, 9, stride=1, padding=4)
-        self.uconv3 = ULayer(512, 512, 9, stride=1, padding=4)
-        self.uconv4 = ULayer(512, 512, 9, stride=1, padding=4)
-        self.uconv5 = ULayer(512, 512, 9, stride=1, padding=4)
-        self.uconv6 = ULayer(512, 512, 17, stride=1, padding=8)
-        self.uconv7 = ULayer(256, 256, 33, stride=1, padding=16)
-        self.uconv8 = ULayer(128, 128, 65, stride=1, padding=32)
+        self.uconv1 = ULayer(512, 512, 9, 4,stride=1)
+        self.uconv2 = ULayer(512, 512, 9, 4, stride=1)
+        self.uconv3 = ULayer(512, 512, 9, 4, stride=1)
+        self.uconv4 = ULayer(512, 512, 9, 4, stride=1)
+        self.uconv5 = ULayer(512, 512, 9, 4, stride=1)
+        self.uconv6 = ULayer(512, 512, 17, 8, stride=1)
+        self.uconv7 = ULayer(256, 256, 33, 16, stride=1)
+        self.uconv8 = ULayer(128, 128, 65, 32, stride=1)
         self.fconv  = FinalConv(2, 2, stride=1)
 
         # self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
@@ -127,7 +127,7 @@ class AudioNet(nn.Module):
 class DLayer(nn.Module):
     expansion = 1
 
-    def __init__(self, inplanes, planes, kernel_size, stride=2, padding, downsample=None):
+    def __init__(self, inplanes, planes, kernel_size, padding, stride=2, downsample=None):
         super(DLayer, self).__init__()
         # self.conv1 = conv3x3(inplanes, planes, stride)
         self.conv1 = nn.Conv1d(in_planes, out_planes, kernel_size=kernel_size, stride=stride,
@@ -158,7 +158,7 @@ class DLayer(nn.Module):
 class ULayer(nn.Module):
     expansion = 1
 
-    def __init__(self, inplanes, planes, kernel_size, stride=1, padding, upsample=None):
+    def __init__(self, inplanes, planes, kernel_size, padding, stride=1, upsample=None):
         super(ULayer, self).__init__()
         self.conv1 = nn.Conv1d(in_planes, out_planes, kernel_size=kernel_size, stride=stride,
                      padding=padding, bias=False)
