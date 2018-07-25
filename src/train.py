@@ -22,7 +22,7 @@ random.seed(123)
 
 
 # TODO list for training the model
-# From Kuleshov's run.py
+# From Kuleshov's run.py, PyTorch super-resolution main.py
 
 # parsing
 parser = argparse.ArgumentParser(description='Audio Super Resolution')
@@ -133,8 +133,8 @@ def eval(args):
 		for batch in range(nb_batch):
             # input, target = batch[0].to(device), batch[1].to(device)
             X_val = valset.data(batch)
-            Y_val = valset.label(batch)
-            prediction = model(X_val)
+			Y_val = valset.label(batch)
+			prediction = model(X_val)
 			mse = loss_function(X_val, Y_val)
 			psnr = 10 * log10(1 / mse.item())
 			avg_psnr += psnr
