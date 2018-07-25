@@ -79,7 +79,7 @@ print(args)
 model = AudioNet(num_classes=1000)
 model.cuda()
 loss_function = nn.MSELoss()
-optimizer = optim.Adam(net_model.parameters(), lr=1e-3)
+optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
 
 
