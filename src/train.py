@@ -33,6 +33,8 @@ parser = argparse.ArgumentParser(description='Audio Super Resolution')
 # train_parser = subparsers.add_parser('train')
 parser.set_defaults(func=train)
 
+# parser.add_argument('--model_name', type=str, default='',
+                    # help='model name')
 parser.add_argument('--train', required=False, 
 	help='path to h5 archive of training patches')
 parser.add_argument('--val', required=False,
@@ -70,6 +72,9 @@ parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
 args = parser.parse_args()
 print(args)
 
+
+model_name = args.model_name
+
 # model building
 model = AudioNet(num_classes=1000)
 model.cuda()
@@ -80,12 +85,12 @@ optimizer = optim.Adam(net_model.parameters(), lr=1e-3)
 
 
 # training process 
-def train(args, model):
+def train(args):
 	# get data
 	root_dir = '../data/vctk/vctk-speaker1-train.4.16000.8192.4096.h5'
 	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
-  	X_train, Y_train = load_h5(args.train)
- 	X_val, Y_val = load_h5(args.val)
+  # X_train, Y_train = load_h5(args.train)
+  # X_val, Y_val = load_h5(args.val)
  	dataset = loading(root_dir, transform=None)
  	valset = loading(val_dir, transform=None)
  	nb_batch = dataset.__len__()
@@ -96,7 +101,8 @@ def train(args, model):
         n = 0
         start = time.time()
         for batch in range(nb_batch):
-
+        	X_train = dataset.data[batch]
+        	Y_train = dataset.label[batch]
         	optimizer.zero_grad()
         	loss = loss_function(model(X_train), Y_train) # not sure yet
         	epoch_loss += loss.item()
@@ -109,24 +115,43 @@ def train(args, model):
 
         end = time.time()
         epoch_l.append(epoch_loss)
-        print("=== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
+        print("== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
+        checkpoint(epoch) # store checkpoint
 
 
 
 
-def eval(args, model):
+def eval(args):
 	# load model
-	model = get_model(args, 0, args.r, from_ckpt=True, train=False)
- 	model.load(args.logname) # from default checkpoint
+	# model = get_model(args, 0, args.r, from_ckpt=True, train=False)
+ # 	model.load(args.logname) # from default checkpoint
+ 	num = 5
+    model = torch.load('epoch/' + "model_epoch_" + num + ".pth")
+    avg_psnr = 0
+	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
+ 	# X_val, Y_val = load_h5(args.val)
+ 	# dataset = loading(root_dir, transform=None)
+ 	valset = loading(val_dir, transform=None)
+ 	nb_batch = valset.__len__()
+    with torch.no_grad():
+        for batch in range(nb_batch):
+            # input, target = batch[0].to(device), batch[1].to(device)
+            X_val = valset.data(batch)
+            Y_val = valset.label(batch)
+            prediction = model(X_val)
 
-  	if args.wav_file_list:
-    	with open(args.wav_file_list) as f:
-      	for line in f:
-        	try:
-          		print line.strip()
-          		upsample_wav(line.strip(), args, model)
-        	except EOFError:
-          		print 'WARNING: Error reading file:', line.strip()
+            mse = loss_function(X_val, Y_val)
+            psnr = 10 * log10(1 / mse.item())
+            avg_psnr += psnr
+    print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(valset)))
+
+    with open(args.wav_file_list) as f:
+      for line in f:
+        try:
+          	print line.strip()
+          	upsample_wav(line.strip(), args, model)
+       	except EOFError:
+         	print 'WARNING: Error reading file:', line.strip()
 
 
 
@@ -135,9 +160,14 @@ def eval(args, model):
 # Checkpoint for storing training info from superresolution/main.py by Soumith and Alykhan
 def checkpoint(epoch):
     model_out_path = "model_epoch_{}.pth".format(epoch)
-    torch.save(model, model_out_path)
+    # model_out_path = 'model/' + model_name + ".pth"
+    torch.save(model, 'epoch/' + model_out_path)
     print("Checkpoint saved to {}".format(model_out_path))
 
+
+
+train(args)
+eval(args)
 
 
 # make and create model for training and evaluating
