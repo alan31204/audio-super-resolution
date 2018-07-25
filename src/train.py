@@ -103,6 +103,10 @@ def train(args):
 		for batch in range(nb_batch):
 			X_train = dataset.data[batch]
 			Y_train = dataset.label[batch]
+			X_train = torch.from_numpy(X_train)
+			Y_train = torch.from_numpy(Y_train)
+			X_train = Variable(X_train.cuda(), requires_grad=False)
+			Y_train = Variable(Y_train.cuda(), requires_grad=False)
 			optimizer.zero_grad()
 			loss = loss_function(model(X_train), Y_train) # not sure yet
 			epoch_loss += loss.item()
@@ -137,6 +141,10 @@ def eval(args):
 			# input, target = batch[0].to(device), batch[1].to(device)
 			X_val = valset.data(batch)
 			Y_val = valset.label(batch)
+			X_val = torch.from_numpy(X_val)
+			Y_val = torch.from_numpy(Y_val)
+			X_val = Variable(X_val.cuda(), requires_grad=False)
+			Y_val = Variable(Y_val.cuda(), requires_grad=False)
 			prediction = model(X_val)
 			mse = loss_function(X_val, Y_val)
 			psnr = 10 * log10(1 / mse.item())
