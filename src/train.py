@@ -31,7 +31,7 @@ parser = argparse.ArgumentParser(description='Audio Super Resolution')
 # train
 
 # train_parser = subparsers.add_parser('train')
-parser.set_defaults(func=train)
+# parser.set_defaults(func=train)
 
 # parser.add_argument('--model_name', type=str, default='',
 					# help='model name')
@@ -73,7 +73,7 @@ args = parser.parse_args()
 print(args)
 
 
-model_name = args.model_name
+# model_name = args.model_name
 
 # model building
 model = AudioNet(num_classes=1000)
