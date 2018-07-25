@@ -132,7 +132,7 @@ def eval(args):
 	with torch.no_grad():
 		for batch in range(nb_batch):
             # input, target = batch[0].to(device), batch[1].to(device)
-            X_val = valset.data(batch)
+			X_val = valset.data(batch)
 			Y_val = valset.label(batch)
 			prediction = model(X_val)
 			mse = loss_function(X_val, Y_val)
