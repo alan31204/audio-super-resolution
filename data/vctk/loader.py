@@ -15,7 +15,7 @@ import time
 
 class loading(Dataset):
     # filename = 'vctk-speaker1-train.4.16000.8192.4096.h5'
-    root_dir = 'vctk-speaker1-train.4.16000.8192.4096.h5'
+    # root_dir = 'vctk-speaker1-train.4.16000.8192.4096.h5'
 
     def __init__(self, root_dir, transform=None):
         
