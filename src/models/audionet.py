@@ -158,7 +158,7 @@ class DLayer(nn.Module):
 class ULayer(nn.Module):
     expansion = 1
 
-    def __init__(self, inplanes, planes, kernel_size, stride=1, padding upsample=None):
+    def __init__(self, inplanes, planes, kernel_size, stride=1, padding, upsample=None):
         super(ULayer, self).__init__()
         self.conv1 = nn.Conv1d(in_planes, out_planes, kernel_size=kernel_size, stride=stride,
                      padding=padding, bias=False)
