@@ -89,11 +89,11 @@ def show_landmarks_batch(sample_batched):
         plt.title('Batch from dataloader')
 
 
-'''
+
 for i_batch, sample_batched in enumerate(dataloader):
     print(i_batch, sample_batched['lr'].size(),
           sample_batched['hr'].size())
-
+'''
     # observe 4th batch and stop.
     if i_batch == 3:
         #plt.figure()

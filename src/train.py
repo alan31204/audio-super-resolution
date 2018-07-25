@@ -92,6 +92,9 @@ def train(args):
 	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
 	dataset = loading(root_dir, transform=None)
 	valset = loading(val_dir, transform=None)
+
+	dataset = DataLoader(dataset, batch_size=4, shuffle=True, num_workers=4)
+	valset = DataLoader(valset, batch_size=4, shuffle=True, num_workers=4)
 	# dataset = DataLoader(dataset1, batch_size=4,shuffle=True, num_workers=4)
 	nb_batch = dataset.__len__()
 	epoch_l = []
@@ -135,6 +138,7 @@ def eval(args):
  	# X_val, Y_val = load_h5(args.val)
  	# dataset = loading(root_dir, transform=None)
 	valset = loading(val_dir, transform=None)
+	valset = DataLoader(valset, batch_size=4, shuffle=True, num_workers=4)
 	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
 	nb_batch = valset.__len__()
 	with torch.no_grad():
