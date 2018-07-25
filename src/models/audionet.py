@@ -56,10 +56,10 @@ class AudioNet(nn.Module):
         self.uconv3 = ULayer(512, 512, 9, 4, stride=1)
         self.uconv4 = ULayer(512, 512, 9, 4, stride=1)
         self.uconv5 = ULayer(512, 512, 9, 4, stride=1)
-        self.uconv6 = ULayer(512, 512, 17, 8, stride=1)
-        self.uconv7 = ULayer(512, 256, 33, 16, stride=1)
-        self.uconv8 = ULayer(256, 128, 65, 32, stride=1)
-        self.fconv  = FinalConv(2, 2, stride=1)
+        self.uconv6 = ULayer(512, 256, 17, 8, stride=1)
+        self.uconv7 = ULayer(256, 128, 33, 16, stride=1)
+        self.uconv8 = ULayer(128, 1, 65, 32, stride=1)
+        self.fconv  = FinalConv(1, 2, stride=1)
 
         # self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
         #                        bias=False)
