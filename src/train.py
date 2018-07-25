@@ -107,6 +107,7 @@ def train(args):
 			Y_train = torch.from_numpy(Y_train)
 			X_train = Variable(X_train.cuda(), requires_grad=False)
 			Y_train = Variable(Y_train.cuda(), requires_grad=False)
+			model.zero_grad()
 			optimizer.zero_grad()
 			loss = loss_function(model(X_train), Y_train) # not sure yet
 			epoch_loss += loss.item()
@@ -146,7 +147,7 @@ def eval(args):
 			X_val = Variable(X_val.cuda(), requires_grad=False)
 			Y_val = Variable(Y_val.cuda(), requires_grad=False)
 			prediction = model(X_val)
-			mse = loss_function(X_val, Y_val)
+			mse = loss_function(prediction, Y_val)
 			psnr = 10 * log10(1 / mse.item())
 			avg_psnr += psnr
 		print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(valset)))

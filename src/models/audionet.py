@@ -42,9 +42,9 @@ class AudioNet(nn.Module):
     def __init__(self, num_classes=1000, log_name ='./run'):
         # self.inplanes = 64
         super(AudioNet, self).__init__()
-        self.dconv1 = DLayer(128, 128, 65, 32, stride=2)
-        self.dconv2 = DLayer(256, 256, 33, 16, stride=2)
-        self.dconv3 = DLayer(512, 512, 17, 8, stride=2)
+        self.dconv1 = DLayer(1, 128, 65, 32, stride=2)
+        self.dconv2 = DLayer(128, 256, 33, 16, stride=2)
+        self.dconv3 = DLayer(256, 512, 17, 8, stride=2)
         self.dconv4 = DLayer(512, 512, 9, 4, stride=2)
         self.dconv5 = DLayer(512, 512, 9, 4, stride=2)
         self.dconv6 = DLayer(512, 512, 9, 4, stride=2)
@@ -57,8 +57,8 @@ class AudioNet(nn.Module):
         self.uconv4 = ULayer(512, 512, 9, 4, stride=1)
         self.uconv5 = ULayer(512, 512, 9, 4, stride=1)
         self.uconv6 = ULayer(512, 512, 17, 8, stride=1)
-        self.uconv7 = ULayer(256, 256, 33, 16, stride=1)
-        self.uconv8 = ULayer(128, 128, 65, 32, stride=1)
+        self.uconv7 = ULayer(512, 256, 33, 16, stride=1)
+        self.uconv8 = ULayer(256, 128, 65, 32, stride=1)
         self.fconv  = FinalConv(2, 2, stride=1)
 
         # self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
