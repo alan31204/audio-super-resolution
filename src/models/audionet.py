@@ -130,8 +130,7 @@ class DLayer(nn.Module):
     def __init__(self, inplanes, planes, kernel_size, padding, stride=2, downsample=None):
         super(DLayer, self).__init__()
         # self.conv1 = conv3x3(inplanes, planes, stride)
-        self.conv1 = nn.Conv1d(inplanes, outconda install -c conda-forge librosaplanes, kernel_size=kernel_size, stride=stride,
-                     padding=padding, bias=False) # padding not sure
+        self.conv1 = nn.Conv1d(inplanes, outconda install -c conda-forge librosaplanes, kernel_size=kernel_size, stride=stride, padding=padding, bias=False) # padding not sure
         # self.bn1 = nn.BatchNorm2d(planes)
         self.relu = nn.LeakyReLU(0.2)
         self.downsample = downsample
@@ -160,8 +159,7 @@ class ULayer(nn.Module):
 
     def __init__(self, inplanes, planes, kernel_size, padding, stride=1, upsample=None):
         super(ULayer, self).__init__()
-        self.conv1 = nn.Conv1d(inplanes, outplanes, kernel_size=kernel_size, stride=stride,
-                     padding=padding, bias=False)
+        self.conv1 = nn.Conv1d(inplanes, outplanes, kernel_size=kernel_size, stride=stride, padding=padding, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
         self.drop = nn.Dropout(p=0.5)
         self.relu = nn.ReLU(inplace=True)
