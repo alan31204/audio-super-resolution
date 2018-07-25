@@ -114,8 +114,8 @@ def train(args):
 			Y_train = torch.from_numpy(Y_train)
 			X_train = Variable(X_train.cuda(), requires_grad=False)
 			Y_train = Variable(Y_train.cuda(), requires_grad=False)
-			print("Hooo: %d" % X_train.size())
-			print("Hyuu: %d" % Y_train.size())
+			print("Hooo: " , X_train.size())
+			print("Hyuu: " , Y_train.size())
 			model.zero_grad()
 			optimizer.zero_grad()
 			loss = loss_function((model(X_train)), Y_train) # not sure yet
