@@ -35,24 +35,24 @@ parser.set_defaults(func=train)
 
 # parser.add_argument('--model_name', type=str, default='',
                     # help='model name')
-parser.add_argument('--train', required=False, 
-	help='path to h5 archive of training patches')
-parser.add_argument('--val', required=False,
-	help='path to h5 archive of validation set patches')
+# parser.add_argument('--train', required=False, 
+# 	help='path to h5 archive of training patches')
+# parser.add_argument('--val', required=False,
+# 	help='path to h5 archive of validation set patches')
 parser.add_argument('-e', '--epochs', type=int, default=100,
 	help='number of epochs to train')
 parser.add_argument('--batch-size', type=int, default=128,
 	help='training batch size')
-parser.add_argument('--logname', default='tmp-run',
-	help='folder where logs will be stored')
+# parser.add_argument('--logname', default='tmp-run',
+# 	help='folder where logs will be stored')
 parser.add_argument('--layers', default=4, type=int,
 	help='number of layers in each of the D and U halves of the network')
-parser.add_argument('--alg', default='adam',
-	help='optimization algorithm')
-parser.add_argument('--lr', default=1e-3, type=float,
-	help='learning rate')
-parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
-    help='momentum')
+# parser.add_argument('--alg', default='adam',
+# 	help='optimization algorithm')
+# parser.add_argument('--lr', default=1e-3, type=float,
+# 	help='learning rate')
+# parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
+#     help='momentum')
 
 # eval
 
@@ -96,6 +96,7 @@ def train(args):
  	nb_batch = dataset.__len__()
  	epoch_l = []
  	# start training process
+ 	
  	for epoch in range(args.epochs):
  		epoch_loss = 0
         n = 0
@@ -144,6 +145,7 @@ def eval(args):
             psnr = 10 * log10(1 / mse.item())
             avg_psnr += psnr
     print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(valset)))
+
 
     with open(args.wav_file_list) as f:
       for line in f:
