@@ -16,7 +16,7 @@ from torch.optim.lr_scheduler import StepLR
 # from models.model import default_opt
 from models import AudioNet
 from models.io import load_h5, upsample_wav
-from data.vctk import loader
+from data.vctk.loader import loading
 import time
 # random.seed(123)
 
