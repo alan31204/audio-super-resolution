@@ -121,8 +121,8 @@ def eval(args):
 	# load model
 	# model = get_model(args, 0, args.r, from_ckpt=True, train=False)
  # 	model.load(args.logname) # from default checkpoint
- 	num = 5
-	model = torch.load('epoch/' + "model_epoch_" + num + ".pth")
+	num = 5
+	model = torch.load('epoch/' + "model_epoch_"+num+".pth")
 	avg_psnr = 0
 	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
  	# X_val, Y_val = load_h5(args.val)
