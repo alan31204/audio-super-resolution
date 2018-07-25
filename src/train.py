@@ -108,16 +108,16 @@ def train(args):
 		# for batch in enumerate(dataset, 1):
 			X_train = dataset.data[batch]
 			Y_train = dataset.label[batch]
-			print("HI: %d" % len(X_train))
-			print("HA: %d" % len(Y_train))
 			X_train = torch.from_numpy(X_train)
 			Y_train = torch.from_numpy(Y_train)
 			X_train = Variable(X_train.cuda(), requires_grad=False)
 			Y_train = Variable(Y_train.cuda(), requires_grad=False)
 			X_train = X_train.transpose(0,1)
 			Y_train = Y_train.transpose(0,1)
-			print("Hooo: " , X_train.size())
-			print("Hyuu: " , Y_train.size())
+			print("X_train size: " , X_train.size())
+			print("X_train dimension: ", X_train[0])
+			print("Y_train size: " , Y_train.size())
+			print("Y_train dimension: ", Y_train[0])
 			model.zero_grad()
 			optimizer.zero_grad()
 			loss = loss_function((model(X_train)), Y_train) # not sure yet
