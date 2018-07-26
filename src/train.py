@@ -105,7 +105,7 @@ def train(args):
 		n = 0
 		start = time.time()
 		for i_batch, data in enumerate(dataset):
-			X_train, Y_train = data['lr'], ['hr']
+			X_train, Y_train = data['lr'], data['hr']
 		#for batch in range(nb_batch):
 		# for batch in enumerate(dataset, 1):
 			X_train = X_train.float()
