@@ -108,8 +108,8 @@ def train(args):
 			X_train, Y_train = data['lr'], ['hr']
 		#for batch in range(nb_batch):
 		# for batch in enumerate(dataset, 1):
-			X_train = torch.from_numpy(X_train).float()
-			Y_train = torch.from_numpy(Y_train).float()
+			X_train = X_train.float()
+			Y_train = Y_train.float()
 			X_train = Variable(X_train.cuda(), requires_grad=False)
 			Y_train = Variable(Y_train.cuda(), requires_grad=False)
 			print("X_train size: " , X_train.size())
