@@ -77,7 +77,7 @@ print(args)
 # model_name = args.model_name
 
 # model building
-model = AudioNet(num_classes=1000)
+model = AudioNet(num_classes=128)
 model.cuda()
 loss_function = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
