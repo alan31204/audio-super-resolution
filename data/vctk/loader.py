@@ -20,7 +20,7 @@ class loading(Dataset):
     def __init__(self, root_dir, transform=None):
         
         # f = h5py.File(root_dir, 'r')
-        with h5py.File(h5_path, 'r') as hf:
+        with h5py.File(root_dir, 'r') as hf:
             # print ('List of arrays in input file:', hf.keys())
             data = np.array(hf.get('data'))
             label = np.array(hf.get('label'))
