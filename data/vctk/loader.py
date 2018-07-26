@@ -24,8 +24,8 @@ class loading(Dataset):
             # print ('List of arrays in input file:', hf.keys())
             data = np.array(hf.get('data'))
             label = np.array(hf.get('label'))
-            print ('Shape of X:', data.shape)
-            print ('Shape of Y:', label.shape)
+            print (data.shape)
+            print (label.shape)
 
 	# self.landmarks_frame = pd.read_csv(csv_file)
         self.root_dir = root_dir
