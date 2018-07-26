@@ -96,7 +96,7 @@ def train(args):
 	# dataset = DataLoader(dataset1, batch_size=4, shuffle=True, num_workers=4)
 	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
 	dataset = dataset1
-	valset = valset1
+	# valset = valset1
 	nb_batch = dataset.__len__()
 	epoch_l = []
  	# start training process
