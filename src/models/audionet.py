@@ -97,8 +97,7 @@ class AudioNet(nn.Module):
         # Forward Downsample pass
         print(x.size())
         print(x[0])
-        # print(x[1])
-        x1 = self.dconv1(x)
+        x1 = self.dconv1(x[0])
         print(x1.size())
         x2 = self.dconv2(x1)
         x3 = self.dconv3(x2)
