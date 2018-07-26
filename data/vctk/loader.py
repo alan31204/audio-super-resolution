@@ -23,18 +23,18 @@ class loading(Dataset):
 
 	# List all groups
         print("Keys: %s" % f.keys())
-        a_group_key = list(f.keys())[0]
-        b_group_key = list(f.keys())[1]
+        a_group_key = f.keys()[0]
+        b_group_key = f.keys()[1]
 
         # Get the data
-        data = list(f[a_group_key])
-        label = list(f[b_group_key])
+        data = f[a_group_key]
+        label = f[b_group_key]
 
-        for entry in data: 
-            entry[1], entry[2] = entry[2], entry[1]
+        # for entry in data: 
+        #     entry[1], entry[2] = entry[2], entry[1]
 
-        for entry in label: 
-            entry[1], entry[2] = entry[2], entry[1]
+        # for entry in label: 
+        #     entry[1], entry[2] = entry[2], entry[1]
 
 	# self.landmarks_frame = pd.read_csv(csv_file)
         self.root_dir = root_dir
