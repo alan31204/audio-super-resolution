@@ -19,22 +19,13 @@ class loading(Dataset):
 
     def __init__(self, root_dir, transform=None):
         
-        f = h5py.File(root_dir, 'r')
-
-	# List all groups
-        print("Keys: %s" % f.keys())
-        a_group_key = f.keys()[0]
-        b_group_key = f.keys()[1]
-
-        # Get the data
-        data = f[a_group_key]
-        label = f[b_group_key]
-
-        # for entry in data: 
-        #     entry[1], entry[2] = entry[2], entry[1]
-
-        # for entry in label: 
-        #     entry[1], entry[2] = entry[2], entry[1]
+        # f = h5py.File(root_dir, 'r')
+        with h5py.File(h5_path, 'r') as hf:
+            print 'List of arrays in input file:', hf.keys()
+            data = np.array(hf.get('data'))
+            label = np.array(hf.get('label'))
+            print 'Shape of X:', data.shape
+            print 'Shape of Y:', label.shape
 
 	# self.landmarks_frame = pd.read_csv(csv_file)
         self.root_dir = root_dir
