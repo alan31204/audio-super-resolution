@@ -110,8 +110,8 @@ def train(args):
 		# for batch in enumerate(dataset, 1):
 			X_train = X_train.float()
 			Y_train = Y_train.float()
-			X_train = Variable(X_train.cuda(), requires_grad=False)
-			Y_train = Variable(Y_train.cuda(), requires_grad=False)
+			X_train = Variable(X_train.cuda(), requires_grad=False).permute(0, 2, 1)
+			Y_train = Variable(Y_train.cuda(), requires_grad=False).permute(0, 2, 1)
 			print("X_train size: " , X_train.size())
 			print("X_train dimension: ", X_train[0][0])
 			print("Y_train size: " , Y_train.size())
