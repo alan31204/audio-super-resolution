@@ -21,11 +21,11 @@ class loading(Dataset):
         
         # f = h5py.File(root_dir, 'r')
         with h5py.File(h5_path, 'r') as hf:
-            print 'List of arrays in input file:', hf.keys()
+            # print ('List of arrays in input file:', hf.keys())
             data = np.array(hf.get('data'))
             label = np.array(hf.get('label'))
-            print 'Shape of X:', data.shape
-            print 'Shape of Y:', label.shape
+            print ('Shape of X:', data.shape)
+            print ('Shape of Y:', label.shape)
 
 	# self.landmarks_frame = pd.read_csv(csv_file)
         self.root_dir = root_dir
