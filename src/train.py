@@ -93,9 +93,9 @@ def train(args):
 	dataset1 = loading(root_dir, transform=None)
 	# valset1 = loading(val_dir, transform=None)
 
-	# dataset = DataLoader(dataset1, batch_size=4, shuffle=True, num_workers=4)
+	dataset = DataLoader(dataset1, batch_size=4, shuffle=True, num_workers=4)
 	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
-	dataset = dataset1
+	#dataset = dataset1
 	# valset = valset1
 	nb_batch = dataset.__len__()
 	epoch_l = []
@@ -104,16 +104,14 @@ def train(args):
 		epoch_loss = 0
 		n = 0
 		start = time.time()
-		for batch in range(nb_batch):
+		for i_batch, data in enumerate(dataset):
+			X_train, Y_train = dataset['lr'], ['hr']
+		#for batch in range(nb_batch):
 		# for batch in enumerate(dataset, 1):
-			X_train = dataset.data[batch]
-			Y_train = dataset.label[batch]
-			X_train = torch.from_numpy(X_train)
-			Y_train = torch.from_numpy(Y_train)
+			X_train = torch.from_numpy(X_train).float()
+			Y_train = torch.from_numpy(Y_train).float()
 			X_train = Variable(X_train.cuda(), requires_grad=False)
 			Y_train = Variable(Y_train.cuda(), requires_grad=False)
-			X_train = X_train.transpose(0,1)
-			Y_train = Y_train.transpose(0,1)
 			print("X_train size: " , X_train.size())
 			print("X_train dimension: ", X_train[0][0])
 			print("Y_train size: " , Y_train.size())
