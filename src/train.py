@@ -175,9 +175,10 @@ def eval(args):
 			mse = loss_function(prediction, Y_val)
 			psnr = 10 * log10(1 / mse.item())
 			avg_psnr += psnr
-			x_s = computeSNR(prediction, n_fft=2048)
+			
+			x_s = computeSNR(prediction.cpu().data.numpy(), n_fft=2048)
 			sum_x += x_s
-			y_s = computeSNR(Y_val, n_fft=2048)
+			y_s = computeSNR(Y_val.cpu().data.numpy(), n_fft=2048)
 			sum_y += y_s
 
 		print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(valset)))
