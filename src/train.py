@@ -99,7 +99,7 @@ def train(args):
 	dataset1 = loading(root_dir, transform=None)
 	# valset1 = loading(val_dir, transform=None)
 
-	dataset = DataLoader(dataset1, batch_size=4, shuffle=True, num_workers=4)
+	dataset = DataLoader(dataset1, batch_size=128, shuffle=True, num_workers=4)
 	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
 	#dataset = dataset1
 	# valset = valset1
