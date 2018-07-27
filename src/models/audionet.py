@@ -82,7 +82,7 @@ class AudioSRNet(nn.Module):
         res += head
 
         tail = self.tail(res)
-        tail += head
+        tail += x
 
         return tail 
 
