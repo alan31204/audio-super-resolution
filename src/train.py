@@ -19,11 +19,15 @@ from models.io import load_h5, upsample_wav
 from data.vctk.loader import loading
 from torch.utils.data import Dataset, DataLoader
 import time
+import matplotlib.pyplot as plt
 # random.seed(123)
 
 
 # TODO list for training the model
 # From Kuleshov's run.py, PyTorch super-resolution main.py
+# Train the network, finish the evaluation, finish the plotting, Think about the network
+# Understand how Kuleshov prepare data, and think about network problem, and how its upsample_wav works
+
 
 # parsing
 parser = argparse.ArgumentParser(description='Audio Super Resolution')
@@ -105,6 +109,7 @@ def train(args):
 	# valset = valset1
 	nb_batch = dataset.__len__()
 	epoch_l = []
+	iter_num = []
  	# start training process
 	for epoch in range(args.epochs):
 		epoch_loss = 0
@@ -121,60 +126,70 @@ def train(args):
 			model.zero_grad()
 			optimizer.zero_grad()
 			loss = loss_function((model(X_train)), Y_train) # not sure yet
-			epoch_loss += loss.item()
-			# epoch_loss += loss.cpu().data.numpy()
+			#epoch_loss += loss.item()
+			epoch_loss += loss.cpu().data.numpy()
 			loss.backward()
 			optimizer.step()
 			n = n + 1
 		
 		end = time.time()
-		epoch_l.append(epoch_loss)
+		epoch_l.append(epoch_loss/n)
+		iter_num.append(i_batch)
 		print("== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
 		checkpoint(epoch) # store checkpoint
 
-
+	fig = plt.plot(iter_num, epoch_l)
+	fig.xlabel('number iteration')
+	fig.ylabel('Loss')
+	plt.savefig('epoch/loss.png')
+	plt.close(fig)
 
 
 def eval(args):
 	# load model
 	# model = get_model(args, 0, args.r, from_ckpt=True, train=False)
  # 	model.load(args.logname) # from default checkpoint
-	num = 5
+	num = 10
 	model = torch.load('epoch/' + "model_epoch_"+num+".pth")
 	avg_psnr = 0
+	sum_x = 0
+	sum_y = 0
 	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
  	# X_val, Y_val = load_h5(args.val)
  	# dataset = loading(root_dir, transform=None)
 	valset1 = loading(val_dir, transform=None)
-	valset = valset1
-	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
-	# valset = DataLoader(valset1, batch_size=4, shuffle=True, num_workers=4)
+	valset = DataLoader(valset1, batch_size=1, shuffle=False, num_workers=4)
 	nb_batch = valset.__len__()
 	with torch.no_grad():
-		for batch in range(nb_batch):
+		for i_batch, val in enumerate(valset):
+		# for batch in range(nb_batch):
 			# input, target = batch[0].to(device), batch[1].to(device)
-			X_val = valset.data(batch)
-			Y_val = valset.label(batch)
-			X_val = torch.from_numpy(X_val)
-			Y_val = torch.from_numpy(Y_val)
-			X_val = Variable(X_val.cuda(), requires_grad=False)
-			Y_val = Variable(Y_val.cuda(), requires_grad=False)
-			X_val = X_val.transpose(0,1)
-			Y_val = Y_val.transpose(0,1)
+			X_val, Y_val = val['lr'], val['hr']
+			X_val = X_val.float()
+			Y_val = Y_val.float()
+			X_val = Variable(X_val.cuda(), requires_grad=False).permute(0, 2, 1) # compute N, C L 
+			Y_val = Variable(Y_val.cuda(), requires_grad=False).permute(0, 2, 1)
 			prediction = model(X_val)
 			mse = loss_function(prediction, Y_val)
 			psnr = 10 * log10(1 / mse.item())
 			avg_psnr += psnr
+			x_s = computeSNR(prediction, n_fft=2048)
+			sum_x += x_s
+			y_s = computeSNR(Y_val, n_fft=2048)
+			sum_y += y_s
+
 		print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(valset)))
+		print("===> X. SNR: {:.4f} dB".format(sum_x / len(valset)))
+		print("===> Y. SNR: {:.4f} dB".format(sum_y / len(valset)))
 
 
-	with open(args.wav_file_list) as f:
-		for line in f:
-			try:
-				print(line.strip())
-				upsample_wav(line.strip(), args, model)
-			except EOFError:
-				print('WARNING: Error reading file:', line.strip())
+	# with open(args.wav_file_list) as f:
+	# 	for line in f:
+	# 		try:
+	# 			print(line.strip())
+	# 			upsample_wav(line.strip(), args, model)
+	# 		except EOFError:
+	# 			print('WARNING: Error reading file:', line.strip())
 
 
 
@@ -187,6 +202,11 @@ def checkpoint(epoch):
 	torch.save(model, 'epoch/' + model_out_path)
 	print("Checkpoint saved to {}".format(model_out_path))
 
+def computeSNR(x, n_fft=2048):
+	snr = librosa.stft(x, n_fft)
+  	p = np.angle(snr)
+  	snr = np.log1p(np.abs(snr))
+  	return snr
 
 
 train(args)
