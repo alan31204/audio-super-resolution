@@ -204,9 +204,9 @@ def checkpoint(epoch):
 
 def computeSNR(x, n_fft=2048):
 	snr = librosa.stft(x, n_fft)
-  	p = np.angle(snr)
-  	snr = np.log1p(np.abs(snr))
-  	return snr
+	p = np.angle(snr)
+	snr = np.log1p(np.abs(snr))
+	return snr
 
 
 train(args)
