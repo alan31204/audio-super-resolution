@@ -38,7 +38,7 @@ def conv_default(in_plane, out_plane, kernel_size, bias = True):
     return nn.Conv1d(in_plane, out_plane, kernel_size, padding = (kernel_size//2), bias = bias)
 
 class ResBlock(nn.Module):
-    def __init__(self, conv, in_plane, out_plane, kernel_size):
+    def __init__(self, conv, in_plane, out_plane, kernel_size, bias = True):
         super(ResBlock, self).__init__()
         modules_body = []
         for i in range(2):
