@@ -20,7 +20,6 @@ from data.vctk.loader import loading
 from torch.utils.data import Dataset, DataLoader
 import time
 import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 # random.seed(123)
 
@@ -210,7 +209,7 @@ def computeSNR(x, n_fft=2048):
 	return snr
 
 
-train(args)
+# train(args)
 eval(args)
 
 
