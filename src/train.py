@@ -1,5 +1,5 @@
 import os, sys
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 os.sys.path.append(os.path.abspath('.'))
 os.sys.path.append(os.path.dirname(os.path.abspath('.')))
 
@@ -19,6 +19,8 @@ from models.io import load_h5, upsample_wav
 from data.vctk.loader import loading
 from torch.utils.data import Dataset, DataLoader
 import time
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 # random.seed(123)
 
@@ -138,11 +140,10 @@ def train(args):
 		print("== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
 		checkpoint(epoch) # store checkpoint
 
-	fig = plt.plot(iter_num, epoch_l)
-	fig.xlabel('number iteration')
-	fig.ylabel('Loss')
+	plt.plot(iter_num, epoch_l)
+	plt.xlabel('number iteration')
+	plt.ylabel('Loss')
 	plt.savefig('epoch/loss.png')
-	plt.close(fig)
 
 
 def eval(args):
