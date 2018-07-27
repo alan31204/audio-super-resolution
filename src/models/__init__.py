@@ -1,1 +1,1 @@
-from .audionet import AudioNet
+from .audionet import AudioSRNet

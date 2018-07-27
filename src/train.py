@@ -14,7 +14,7 @@ from torchvision import datasets, transforms
 from torch.autograd import Variable
 from torch.optim.lr_scheduler import StepLR
 # from models.model import default_opt
-from models import AudioNet
+from models import *
 from models.io import load_h5, upsample_wav
 from data.vctk.loader import loading
 from torch.utils.data import Dataset, DataLoader
@@ -44,6 +44,12 @@ parser.add_argument('-e', '--epochs', type=int, default=100,
 	help='number of epochs to train')
 parser.add_argument('--batch-size', type=int, default=128,
 	help='training batch size')
+parser.add_argument('--res_block', type=int, default=20,
+	help='number of res_block')
+parser.add_argument('--feats', type=int, default=64,
+	help='number of feat')
+parser.add_argument('--kernel_size', type=int, default=13,
+	help='kernel size')
 # parser.add_argument('--logname', default='tmp-run',
 # 	help='folder where logs will be stored')
 parser.add_argument('--layers', default=4, type=int,
@@ -77,7 +83,7 @@ print(args)
 # model_name = args.model_name
 
 # model building
-model = AudioNet(num_classes=128)
+model = AudioSRNet(args)
 model.cuda()
 loss_function = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
@@ -112,10 +118,6 @@ def train(args):
 			Y_train = Y_train.float()
 			X_train = Variable(X_train.cuda(), requires_grad=False).permute(0, 2, 1)
 			Y_train = Variable(Y_train.cuda(), requires_grad=False).permute(0, 2, 1)
-			print("X_train size: " , X_train.size())
-			print("X_train dimension: ", X_train[0][0])
-			print("Y_train size: " , Y_train.size())
-			print("Y_train dimension: ", Y_train[0][0])
 			model.zero_grad()
 			optimizer.zero_grad()
 			loss = loss_function((model(X_train)), Y_train) # not sure yet

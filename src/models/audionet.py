@@ -32,14 +32,66 @@ model_urls = {
 def conv3x3(inplanes, outplanes, stride=1):
     """3x3 convolution with padding"""
     return nn.Conv1d(inplanes, outplanes, kernel_size=3, stride=stride,
-                     padding=0, bias=False)
+                     padding=0, bias=False, act = nn.ReLU(True))
+
+def conv_default(in_plane, out_plane, kernel_size, bias = True):
+    return nn.Conv1d(in_plane, out_plane, kernel_size, padding = (kernel_size//2), bias = bias)
+
+class ResBlock(nn.Module):
+    def __init__(self, conv, in_plane, out_plane, kernel_size):
+        super(ResBlock, self).__init__()
+        modules_body = []
+        for i in range(2):
+            modules_body.append(conv(in_plane, out_plane, kernel_size, bias = bias))
+            if i == 0:modules_body.append(act)
+        self.body = nn.Sequential(*modules_body)
+
+    def forward(self, x):
+        res = self.body(x)
+        res += x
+        return res
+
+
+class AudioSRNet(nn.Module):
+
+    def __init__(self, args, conv = conv_default):
+        super(AudioSRNet, self).__init__()
+        n_block = args.res_block
+        feats = args.feats
+        kernel_size = args.kernel_size
+        act = nn.ReLU(True)
+
+        modules_head = [conv(1, feats, kernel_size)]
+
+        modules_body = [ResBlock(conv, feats, feats, kernel_size) \
+                        for _ in range(n_block)]
+
+
+        modules_tail = [conv(feats, 1, kernel_size)]
+
+        self.head = nn.Sequential(*modules_head)
+        self.body = nn.Sequential(*modules_body)
+        self.tail = nn.Sequential(*modules_tail)
+
+
+    def forward(self, x):
+        head = self.head(x)
+
+        res = self.body(head)
+
+        res += head
+
+        tail = self.tail(res)
+        tail += head
+
+        return tail 
 
 
 class AudioNet(nn.Module):
 # Generic PyTorch model training code
     # def __init__(self, from_ckpt=False, n_dim=None, r=2, opt_params=default_opt):
 
-    def __init__(self, num_classes=1000):
+    def __init__(self):
         # self.inplanes = 64
         super(AudioNet, self).__init__()
         self.dconv1 = DLayer(1, 128, 65, 32, stride=2)
@@ -96,7 +148,6 @@ class AudioNet(nn.Module):
     def forward(self, x):
         # Forward Downsample pass
         print(x.size())
-        print(x[0])
         x1 = self.dconv1(x[0])
         print(x1.size())
         x2 = self.dconv2(x1)
