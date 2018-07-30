@@ -5,3 +5,4 @@
 *.pyc
 src/epoch/*.pth
 !src/epoch/.gitkeep
+src/models/__pycache__/*
