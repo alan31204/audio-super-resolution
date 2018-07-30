@@ -3,3 +3,4 @@
 #Python: 
 *.h5
 *.pyc
+src/epoch/*.pth
