@@ -21,7 +21,6 @@ from torch.utils.data import Dataset, DataLoader
 import time
 import matplotlib
 import matplotlib.pyplot as plt
-plt.switch_backend('agg')
 from math import log10
 import librosa
 # random.seed(123)
@@ -142,7 +141,6 @@ def train(args):
 		print("== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
 		checkpoint(epoch) # store checkpoint
 
-	fig = plt.figure()
 	plt.plot(iter_num, epoch_l)
 	plt.xlabel('number iteration')
 	plt.ylabel('Loss')
@@ -177,7 +175,7 @@ def eval(args):
 			mse = loss_function(prediction, Y_val)
 			psnr = 10 * log10(1 / mse.item())
 			avg_psnr += psnr
-
+			
 			x_s = computeSNR(prediction.cpu().data.numpy(), n_fft=2048)
 			sum_x += x_s
 			y_s = computeSNR(Y_val.cpu().data.numpy(), n_fft=2048)
@@ -204,7 +202,7 @@ def eval(args):
 def checkpoint(epoch):
 	model_out_path = "model_epoch_{}.pth".format(epoch)
 	# model_out_path = 'model/' + model_name + ".pth"
-	torch.save(model, 'epochs/' + model_out_path)
+	torch.save(model, 'epoch/' + model_out_path)
 	print("Checkpoint saved to {}".format(model_out_path))
 
 def computeSNR(x, n_fft=2048):
