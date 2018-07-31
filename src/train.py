@@ -118,6 +118,7 @@ def train(args):
 	for epoch in range(args.epochs):
 		epoch_loss = 0
 		n = 0
+		i = 0
 		start = time.time()
 		for i_batch, data in enumerate(dataset):
 			X_train, Y_train = data['lr'], data['hr']
@@ -135,11 +136,11 @@ def train(args):
 			loss.backward()
 			optimizer.step()
 			n = n + 1
-			iter_num.append(n)
-		
+
+		i = i + 1
 		end = time.time()
 		epoch_l.append(epoch_loss/n)
-		
+		iter_num.append(i)
 		print("== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
 		checkpoint(epoch) # store checkpoint
 
