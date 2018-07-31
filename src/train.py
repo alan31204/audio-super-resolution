@@ -155,8 +155,8 @@ def eval(args):
 	# load model
 	# model = get_model(args, 0, args.r, from_ckpt=True, train=False)
  # 	model.load(args.logname) # from default checkpoint
-	num = 10
-	model = torch.load('epoch/' + "model_epoch_"+str(num)+".pth")
+	num = 49
+	model = torch.load('epochs/' + "model_epoch_"+str(num)+".pth")
 	avg_psnr = 0
 	sum_x = 0
 	sum_y = 0
