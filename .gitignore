@@ -6,3 +6,6 @@
 src/epoch/*.pth
 !src/epoch/.gitkeep
 src/models/__pycache__/*
+
+src/epochs/*.pth
+!src/epochs/.gitkeep

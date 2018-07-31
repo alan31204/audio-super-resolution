@@ -146,7 +146,7 @@ def train(args):
 	plt.plot(iter_num, epoch_l)
 	plt.xlabel('number iteration')
 	plt.ylabel('Loss')
-	plt.savefig('epoch/loss.png')
+	plt.savefig('epochs/loss.png')
 
 
 def eval(args):
