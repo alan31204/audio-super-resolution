@@ -21,13 +21,14 @@ def load_h5(h5_path):
 
 	return X, Y
 
-def upsample_wav(wav, args, model):
+def upsample_wav(wav, model):
 	# load signal
-	x_hr, fs = librosa.load(wav, sr=args.sr)
+	sr = 2
+	x_hr, fs = librosa.load(wav, sr)
 
 	# downscale signal
 	# x_lr = np.array(x_hr[0::args.r])
-	x_lr = decimate(x_hr, args.r)
+	x_lr = decimate(x_hr, 2)
 	# x_lr = decimate(x_hr, args.r, ftype='fir', zero_phase=True)
 	# x_lr = downsample_bt(x_hr, args.r)
 
@@ -42,15 +43,18 @@ def upsample_wav(wav, args, model):
 	# save the file
 	outname = wav + '.' + args.out_label
 	librosa.output.write_wav(outname + '.hr.wav', x_hr, fs)	
-	librosa.output.write_wav(outname + '.lr.wav', x_lr, fs / args.r)	
+	librosa.output.write_wav(outname + '.lr.wav', x_lr, fs / 2)	
 	librosa.output.write_wav(outname + '.pr.wav', x_pr, fs)	
 
 	# save the spectrum
 	S = get_spectrum(x_pr, n_fft=2048)
+	print("PR val: %.4f" % S)
 	save_spectrum(S, outfile=outname + '.pr.png')
 	S = get_spectrum(x_hr, n_fft=2048)
+	print("HR val: %.4f" % S)
 	save_spectrum(S, outfile=outname + '.hr.png')
-	S = get_spectrum(x_lr, n_fft=2048/args.r)
+	S = get_spectrum(x_lr, n_fft=2048/2)
+	print("LR val: %.4f" % S)
 	save_spectrum(S, outfile=outname + '.lr.png')
 
 # ----------------------------------------------------------------------------

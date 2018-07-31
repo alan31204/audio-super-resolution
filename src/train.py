@@ -62,6 +62,8 @@ parser.add_argument('--kernel_size', type=int, default=13,
 # 	help='folder where logs will be stored')
 parser.add_argument('--layers', default=4, type=int,
 	help='number of layers in each of the D and U halves of the network')
+parser.add_argument('--wav-file-list', default="../data/vctk/speaker1/speaker1-val-files.txt"
+    help='list of audio files for evaluation')
 # parser.add_argument('--alg', default='adam',
 # 	help='optimization algorithm')
 # parser.add_argument('--lr', default=1e-3, type=float,
@@ -180,23 +182,18 @@ def eval(args):
 			psnr = 10 * log10(1 / mse.item())
 			avg_psnr += psnr
 
-			x_s = computeSNR(prediction.cpu().data.numpy(), n_fft=2048)
-			sum_x += x_s
-			y_s = computeSNR(Y_val.cpu().data.numpy(), n_fft=2048)
-			sum_y += y_s
-
 		print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(valset)))
-		print("===> X. SNR: {:.4f} dB".format(sum_x / len(valset)))
-		print("===> Y. SNR: {:.4f} dB".format(sum_y / len(valset)))
+		# print("===> X. SNR: {:.4f} dB".format(sum_x / len(valset)))
+		# print("===> Y. SNR: {:.4f} dB".format(sum_y / len(valset)))
 
 
-	# with open(args.wav_file_list) as f:
-	# 	for line in f:
-	# 		try:
-	# 			print(line.strip())
-	# 			upsample_wav(line.strip(), args, model)
-	# 		except EOFError:
-	# 			print('WARNING: Error reading file:', line.strip())
+	with open(args.wav_file_list) as f:
+		for line in f:
+			try:
+				print(line.strip())
+				upsample_wav(line.strip(), model)
+			except EOFError:
+				print('WARNING: Error reading file:', line.strip())
 
 
 
