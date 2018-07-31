@@ -62,8 +62,8 @@ parser.add_argument('--kernel_size', type=int, default=13,
 # 	help='folder where logs will be stored')
 parser.add_argument('--layers', default=4, type=int,
 	help='number of layers in each of the D and U halves of the network')
-parser.add_argument('--wav-file-list', default="../data/vctk/speaker1/speaker1-val-files.txt"
-    help='list of audio files for evaluation')
+parser.add_argument('--wav-file-list', default="../data/vctk/speaker1/speaker1-val-files.txt",
+	help='list of audio files for evaluation')
 # parser.add_argument('--alg', default='adam',
 # 	help='optimization algorithm')
 # parser.add_argument('--lr', default=1e-3, type=float,
