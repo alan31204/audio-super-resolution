@@ -138,7 +138,7 @@ def train(args):
 		
 		end = time.time()
 		epoch_l.append(epoch_loss/n)
-		iter_num.append(i_batch)
+		iter_num.append(n)
 		print("== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
 		checkpoint(epoch) # store checkpoint
 
@@ -146,7 +146,7 @@ def train(args):
 	plt.plot(iter_num, epoch_l)
 	plt.xlabel('number iteration')
 	plt.ylabel('Loss')
-	plt.savefig('epochs/loss.png')
+	plt.savefig('epoch/loss.png')
 
 
 def eval(args):
@@ -204,7 +204,7 @@ def eval(args):
 def checkpoint(epoch):
 	model_out_path = "model_epoch_{}.pth".format(epoch)
 	# model_out_path = 'model/' + model_name + ".pth"
-	torch.save(model, 'epochs/' + model_out_path)
+	torch.save(model, 'epoch/' + model_out_path)
 	print("Checkpoint saved to {}".format(model_out_path))
 
 def computeSNR(x, n_fft=2048):
