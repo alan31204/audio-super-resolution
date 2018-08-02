@@ -65,8 +65,6 @@ class AudioSRNet(nn.Module):
 
         modules_body = [ResBlock(conv, feats, feats, kernel_size) \
                         for _ in range(n_block)]
-
-
         modules_tail = [conv(feats, 1, kernel_size)]
 
         self.head = nn.Sequential(*modules_head)
@@ -76,15 +74,29 @@ class AudioSRNet(nn.Module):
 
     def forward(self, x):
         head = self.head(x)
-
         res = self.body(head)
-
         res += head
-
         tail = self.tail(res)
         tail += x
 
         return tail 
+
+
+class DBlock(nn.Module):
+    def __init__(self, in_plane, out_plane, kernel_size, bias = True, stride=2, act = nn.ReLU(True)):
+        super(DBlock, self).__init__()
+        modules_body = []
+        for i in range(2):
+            modules_body.append(conv(in_plane, out_plane, kernel_size, bias = bias))
+            if i == 0:modules_body.append(act)
+        self.body = nn.Sequential(*modules_body)
+
+    def forward(self, x):
+        res = self.body(x)
+        res += x
+        return res
+
+
 
 
 class AudioNet(nn.Module):
@@ -93,23 +105,23 @@ class AudioNet(nn.Module):
     def __init__(self):
         # self.inplanes = 64
         super(AudioNet, self).__init__()
-        self.dconv1 = DLayer(1, 128, 65, 32, stride=2)
-        self.dconv2 = DLayer(128, 256, 33, 16, stride=2)
-        self.dconv3 = DLayer(256, 512, 17, 8, stride=2)
-        self.dconv4 = DLayer(512, 512, 9, 4, stride=2)
-        self.dconv5 = DLayer(512, 512, 9, 4, stride=2)
-        self.dconv6 = DLayer(512, 512, 9, 4, stride=2)
-        self.dconv7 = DLayer(512, 512, 9, 4, stride=2)
-        self.dconv8 = DLayer(512, 512, 9, 4, stride=2)
+        self.dconv1 = DLayer(1, 128, 65, stride=2)
+        self.dconv2 = DLayer(128, 256, 33, stride=2)
+        self.dconv3 = DLayer(256, 512, 17, stride=2)
+        self.dconv4 = DLayer(512, 512, 9, stride=2)
+        self.dconv5 = DLayer(512, 512, 9, stride=2)
+        self.dconv6 = DLayer(512, 512, 9, stride=2)
+        self.dconv7 = DLayer(512, 512, 9, stride=2)
+        self.dconv8 = DLayer(512, 512, 9, stride=2)
         self.bneck1 = Bottleneck(512, 512, stride=2)
-        self.uconv1 = ULayer(512, 512, 9, 4,stride=1)
-        self.uconv2 = ULayer(512, 512, 9, 4, stride=1)
-        self.uconv3 = ULayer(512, 512, 9, 4, stride=1)
-        self.uconv4 = ULayer(512, 512, 9, 4, stride=1)
-        self.uconv5 = ULayer(512, 512, 9, 4, stride=1)
-        self.uconv6 = ULayer(512, 256, 17, 8, stride=1)
-        self.uconv7 = ULayer(256, 128, 33, 16, stride=1)
-        self.uconv8 = ULayer(128, 1, 65, 32, stride=1)
+        self.uconv1 = ULayer(512, 512, 9,stride=1)
+        self.uconv2 = ULayer(512, 512, 9, stride=1)
+        self.uconv3 = ULayer(512, 512, 9, stride=1)
+        self.uconv4 = ULayer(512, 512, 9,stride=1)
+        self.uconv5 = ULayer(512, 512, 9, stride=1)
+        self.uconv6 = ULayer(512, 256, 17, stride=1)
+        self.uconv7 = ULayer(256, 128, 33,  stride=1)
+        self.uconv8 = ULayer(128, 1, 65, stride=1)
         self.fconv  = FinalConv(1, 2, stride=1)
 
         # self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
@@ -180,10 +192,10 @@ class AudioNet(nn.Module):
 class DLayer(nn.Module):
     expansion = 1
 
-    def __init__(self, inplanes, planes, kernel_size, padding, stride=2, downsample=None):
+    def __init__(self, inplanes, planes, kernel_size, stride=2, downsample=None):
         super(DLayer, self).__init__()
         # self.conv1 = conv3x3(inplanes, planes, stride)
-        self.conv1 = nn.Conv1d(inplanes, planes, kernel_size=kernel_size, stride=stride, padding=padding, bias=False) # padding not sure
+        self.conv1 = nn.Conv1d(inplanes, planes, kernel_size=kernel_size, stride=stride, padding=(kernel_size//2), bias=False) # padding not sure
         # self.bn1 = nn.BatchNorm2d(planes)
         self.relu = nn.LeakyReLU(0.2)
         self.downsample = downsample
@@ -210,9 +222,9 @@ class DLayer(nn.Module):
 class ULayer(nn.Module):
     expansion = 1
 
-    def __init__(self, inplanes, planes, kernel_size, padding, stride=1, upsample=None):
+    def __init__(self, inplanes, planes, kernel_size, stride=1, upsample=None):
         super(ULayer, self).__init__()
-        self.conv1 = nn.Conv1d(inplanes, planes, kernel_size=kernel_size, stride=stride, padding=padding, bias=False)
+        self.conv1 = nn.Conv1d(inplanes, planes, kernel_size=kernel_size, stride=stride, padding=(kernel_size//2), bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
         self.drop = nn.Dropout(p=0.5)
         self.relu = nn.ReLU(inplace=True)
