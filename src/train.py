@@ -97,6 +97,9 @@ print(args)
 # model building
 if args.path: 
 	model = torch.load(args.path)
+	model.cuda()
+	loss_function = nn.MSELoss()
+	optimizer = optim.Adam(model.parameters(), lr=1e-3)
 else:
 	model = AudioSRNet(args)
 	model.cuda()
