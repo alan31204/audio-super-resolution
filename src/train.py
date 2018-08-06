@@ -125,10 +125,10 @@ def train(args):
 	epoch_l = []
 	iter_num = []
  	# start training process
+ 	i = 0
 	for epoch in range(args.epochs):
 		epoch_loss = 0
 		n = 0
-		i = 0
 		start = time.time()
 		for i_batch, data in enumerate(dataset):
 			X_train, Y_train = data['lr'], data['hr']
