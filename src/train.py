@@ -151,6 +151,7 @@ def train(args):
 		end = time.time()
 		epoch_l.append(epoch_loss/n)
 		iter_num.append(i)
+		print(i)
 		print("== Epoch {%s}   Loss: {%.4f}  Running time: {%4f}" % (str(epoch), (epoch_loss) / n, end - start))
 		checkpoint(epoch) # store checkpoint
 
