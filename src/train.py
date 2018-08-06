@@ -125,7 +125,7 @@ def train(args):
 	epoch_l = []
 	iter_num = []
  	# start training process
- 	i = 0
+	i = 0
 	for epoch in range(args.epochs):
 		epoch_loss = 0
 		n = 0
