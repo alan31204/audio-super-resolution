@@ -2,6 +2,10 @@ import os
 import numpy as np
 import h5py
 import librosa
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
 
 from scipy.signal import decimate
 
@@ -35,8 +39,10 @@ def upsample_wav(wav, model):
 	# upscale the low-res version
 	# P = model.predict(x_lr.reshape((1,len(x_lr),1)))
 	# x_pr = P.flatten()
+	x_lr = torch.from_numpy(x_lr)
 	P = model(x_lr)
-	x_pr = P.flatten()
+	# x_pr = P.flatten()
+	x_pr = P
 
 
 	# crop so that it works with scaling ratio
