@@ -23,12 +23,12 @@ def load_h5(h5_path):
 
 def upsample_wav(wav, model):
 	# load signal
-	sr = 2
+	sr = 4
 	x_hr, fs = librosa.load(wav, sr)
 
 	# downscale signal
 	# x_lr = np.array(x_hr[0::args.r])
-	x_lr = decimate(x_hr, 2)
+	x_lr = decimate(x_hr, 4)
 	# x_lr = decimate(x_hr, args.r, ftype='fir', zero_phase=True)
 	# x_lr = downsample_bt(x_hr, args.r)
 
@@ -46,7 +46,7 @@ def upsample_wav(wav, model):
 	# save the file
 	outname = wav + '.' + args.out_label
 	librosa.output.write_wav(outname + '.hr.wav', x_hr, fs)	
-	librosa.output.write_wav(outname + '.lr.wav', x_lr, fs / 2)	
+	librosa.output.write_wav(outname + '.lr.wav', x_lr, fs / 4)	
 	librosa.output.write_wav(outname + '.pr.wav', x_pr, fs)	
 
 	# save the spectrum
