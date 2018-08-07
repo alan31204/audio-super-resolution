@@ -62,8 +62,8 @@ parser.add_argument('--kernel_size', type=int, default=13,
 # 	help='folder where logs will be stored')
 parser.add_argument('--layers', default=4, type=int,
 	help='number of layers in each of the D and U halves of the network')
-parser.add_argument('--wav-file-list', default="../data/vctk/speaker1/speaker1-val-files.txt",
-	help='list of audio files for evaluation')
+# parser.add_argument('--wav-file-list', default="../data/vctk/speaker1/speaker1-val-files.txt",
+# 	help='list of audio files for evaluation')
 parser.add_argument('--path',
 	help='path to previous training epoch')
 # parser.add_argument('--alg', default='adam',
@@ -172,6 +172,7 @@ def eval(args):
 	sum_x = 0
 	sum_y = 0
 	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
+	file_list = '../data/vctk/speaker1/speaker1-val-files.txt'
  	# X_val, Y_val = load_h5(args.val)
  	# dataset = loading(root_dir, transform=None)
 	valset1 = loading(val_dir, transform=None)
@@ -196,7 +197,7 @@ def eval(args):
 		# print("===> Y. SNR: {:.4f} dB".format(sum_y / len(valset)))
 
 
-	with open(args.wav_file_list) as f:
+	with open(file_list) as f:
 		for line in f:
 			try:
 				print(line.strip())
@@ -222,8 +223,8 @@ def computeSNR(x, n_fft=2048):
 	return snr
 
 
-train(args)
-# eval(args)
+# train(args)
+eval(args)
 
 
 # make and create model for training and evaluating
