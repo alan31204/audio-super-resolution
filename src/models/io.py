@@ -23,7 +23,7 @@ def load_h5(h5_path):
 
 def upsample_wav(wav, model):
 	# load signal
-	sr = 4
+	sr = 16000
 	x_hr, fs = librosa.load(wav, sr)
 
 	# downscale signal
