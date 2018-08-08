@@ -52,7 +52,7 @@ def upsample_wav(wav, model):
 	temp_lr = Variable(temp_lr.cuda(), requires_grad=False).permute(0,1,2)
 	P = model(temp_lr)
 	# x_pr = P.flatten()
-	x_pr = P.detach().numpy()
+	x_pr = P.cpu().data.numpy()
 
 
 	# crop so that it works with scaling ratio
