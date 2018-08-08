@@ -169,6 +169,7 @@ def eval(args):
 	num = 49
 	model = torch.load('epochs/' + "model_epoch_"+str(num)+".pth")
 	avg_psnr = 0
+	avg_snr = 0
 	sum_x = 0
 	sum_y = 0
 	val_dir = '../data/vctk/vctk-speaker1-val.4.16000.8192.4096.h5'
@@ -197,9 +198,11 @@ def eval(args):
 			prediction = model(X_val)
 			mse = loss_function(prediction, Y_val)
 			psnr = 10 * log10(1 / mse.item())
+			snr = 10 * log10(1 / mse.cpu().data.numpy())
 			avg_psnr += psnr
+			avg_snr += snr
 
-		print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(valset)))
+		print("===> Avg. SNR: {:.4f} dB".format(avg_snr / len(valset)))
 		# print("===> X. SNR: {:.4f} dB".format(sum_x / len(valset)))
 		# print("===> Y. SNR: {:.4f} dB".format(sum_y / len(valset)))
 
