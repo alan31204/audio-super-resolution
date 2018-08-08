@@ -44,6 +44,7 @@ def upsample_wav(wav, model):
 	print("HR")
 	print(x_hr.shape)
 	x_lr = torch.from_numpy(x_lr.copy())
+	print(x_lr.size())
 	P = model(x_lr)
 	# x_pr = P.flatten()
 	x_pr = P.numpy()
