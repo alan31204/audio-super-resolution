@@ -235,8 +235,8 @@ def computeSNR(x, n_fft=2048):
 	return snr
 
 
-train(args)
-# eval(args)
+# train(args)
+eval(args)
 
 
 # make and create model for training and evaluating
