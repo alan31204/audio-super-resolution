@@ -52,7 +52,7 @@ parser.add_argument('-e', '--epochs', type=int, default=100,
 	help='number of epochs to train')
 parser.add_argument('--batch-size', type=int, default=128,
 	help='training batch size')
-parser.add_argument('--res_block', type=int, default=20,
+parser.add_argument('--res_block', type=int, default=10,
 	help='number of res_block')
 parser.add_argument('--feats', type=int, default=64,
 	help='number of feat')
