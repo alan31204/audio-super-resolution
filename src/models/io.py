@@ -84,7 +84,6 @@ def upsample_wav(wav, model):
 def get_spectrum(x, n_fft=2048):
 	S = librosa.stft(x, int(n_fft))
 	p = np.angle(S)
-	print(p)
 	S = np.log1p(np.abs(S))
 	return S
 
