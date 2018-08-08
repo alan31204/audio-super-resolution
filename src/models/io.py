@@ -6,6 +6,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
+from torchvision import datasets, transforms
+from torch.autograd import Variable
+from torch.optim.lr_scheduler import StepLR
 
 from scipy.signal import decimate
 
