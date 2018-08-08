@@ -70,13 +70,13 @@ def upsample_wav(wav, model):
 
 	# save the spectrum
 	S = get_spectrum(x_pr, n_fft=2048)
-	print("PR val: %.4f" % S)
+	# print("PR val: %.4f" % S)
 	save_spectrum(S, outfile=outname + '.pr.png')
 	S = get_spectrum(x_hr, n_fft=2048)
-	print("HR val: %.4f" % S)
+	# print("HR val: %.4f" % S)
 	save_spectrum(S, outfile=outname + '.hr.png')
 	S = get_spectrum(x_lr, n_fft=2048/2)
-	print("LR val: %.4f" % S)
+	# print("LR val: %.4f" % S)
 	save_spectrum(S, outfile=outname + '.lr.png')
 
 # ----------------------------------------------------------------------------
