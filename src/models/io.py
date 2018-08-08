@@ -42,10 +42,7 @@ def upsample_wav(wav, model):
 	# upscale the low-res version
 	# P = model.predict(x_lr.reshape((1,len(x_lr),1)))
 	# x_pr = P.flatten()
-	print("LR: ")
-	print(x_lr)
-	print("HR")
-	print(x_hr.shape)
+	
 	temp_lr = x_lr.reshape((1,1,len(x_lr)))
 	temp_lr = torch.from_numpy(temp_lr.copy())
 	temp_lr = temp_lr.float()
