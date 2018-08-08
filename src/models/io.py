@@ -85,7 +85,7 @@ def get_spectrum(x, n_fft=2048):
 	S = librosa.stft(x, n_fft)
 	p = np.angle(S)
 	print(p)
-	S = np.log1p(int(np.abs(S)))
+	S = np.log1p(np.abs(S))
 	return S
 
 def save_spectrum(S, lim=800, outfile='spectrogram.png'):
