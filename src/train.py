@@ -1,5 +1,5 @@
 import os, sys
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 os.sys.path.append(os.path.abspath('.'))
 os.sys.path.append(os.path.dirname(os.path.abspath('.')))
 
