@@ -10,4 +10,5 @@ data/vctk/VCTK-Corpus/
 src/epochs/*.pth
 !src/epochs/.gitkeep
 *.wav
+!src/files/*.pr.wav
 *.raw
