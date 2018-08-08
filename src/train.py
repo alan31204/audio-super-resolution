@@ -186,8 +186,8 @@ def eval(args):
 			print(X_val.numpy()[0].shape)
 			x_temp = X_val.numpy()[0]
 			y_temp = Y_val.numpy()[0]
-			x_S = computeSNR(x_temp,n_fft)
-			y_S = computeSNR(y_temp,n_fft)
+			x_S = computeSNR(x_temp,2048)
+			y_S = computeSNR(y_temp,2048)
 			sum_x += x_S
 			sum_y += y_S
 			X_val = X_val.float()
@@ -208,7 +208,7 @@ def eval(args):
 		for line in f:
 			try:
 				print(line.strip())
-				upsample_wav(line.strip(), model)
+				# upsample_wav(line.strip(), model)
 			except EOFError:
 				print('WARNING: Error reading file:', line.strip())
 
