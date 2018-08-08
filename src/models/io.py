@@ -46,7 +46,7 @@ def upsample_wav(wav, model):
 	x_lr = torch.from_numpy(x_lr)
 	P = model(x_lr)
 	# x_pr = P.flatten()
-	x_pr = P
+	x_pr = P.numpy()
 
 
 	# crop so that it works with scaling ratio
