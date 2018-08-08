@@ -184,12 +184,12 @@ def eval(args):
 			# input, target = batch[0].to(device), batch[1].to(device)
 			X_val, Y_val = val['lr'], val['hr']
 			print(X_val.numpy()[0].shape)
-			x_temp = X_val.numpy()[0]
-			y_temp = Y_val.numpy()[0]
-			x_S = computeSNR(x_temp,2048)
-			y_S = computeSNR(y_temp,2048)
-			sum_x += x_S
-			sum_y += y_S
+			# x_temp = X_val.numpy()[0]
+			# y_temp = Y_val.numpy()[0]
+			# x_S = computeSNR(x_temp,2048)
+			# y_S = computeSNR(y_temp,2048)
+			# sum_x += x_S
+			# sum_y += y_S
 			X_val = X_val.float()
 			Y_val = Y_val.float()
 			X_val = Variable(X_val.cuda(), requires_grad=False).permute(0, 2, 1) # compute N, C L 
@@ -200,15 +200,15 @@ def eval(args):
 			avg_psnr += psnr
 
 		print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(valset)))
-		print("===> X. SNR: {:.4f} dB".format(sum_x / len(valset)))
-		print("===> Y. SNR: {:.4f} dB".format(sum_y / len(valset)))
+		# print("===> X. SNR: {:.4f} dB".format(sum_x / len(valset)))
+		# print("===> Y. SNR: {:.4f} dB".format(sum_y / len(valset)))
 
 
 	with open(file_list) as f:
 		for line in f:
 			try:
 				print(line.strip())
-				# upsample_wav(line.strip(), model)
+				upsample_wav(line.strip(), model)
 			except EOFError:
 				print('WARNING: Error reading file:', line.strip())
 
