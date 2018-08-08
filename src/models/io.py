@@ -53,6 +53,7 @@ def upsample_wav(wav, model):
 	P = model(temp_lr)
 	# x_pr = P.flatten()
 	x_pr = P.cpu().data.numpy()
+	x_pr = x_pr.flatten()
 
 
 	# crop so that it works with scaling ratio
