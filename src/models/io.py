@@ -60,8 +60,8 @@ def upsample_wav(wav, model):
 	x_lr = x_lr[:len(x_pr)]
 
 	# save the file
-	out_label = 1
-	outname = wav + '.' + str(out_label)
+	out_label = "singlespeaker-out"
+	outname = wav + '.' + out_label
 	librosa.output.write_wav(outname + '.hr.wav', x_hr, fs)	
 	librosa.output.write_wav(outname + '.lr.wav', x_lr, fs / 4)	
 	librosa.output.write_wav(outname + '.pr.wav', x_pr, fs)	
