@@ -62,8 +62,9 @@ def upsample_wav(wav, model):
 	# save the file
 	out_label = "singlespeaker-out"
 	outname = wav + '.' + out_label
+	rand = 4
 	librosa.output.write_wav(outname + '.hr.wav', x_hr, fs)	
-	librosa.output.write_wav(outname + '.lr.wav', x_lr, fs / 4)	
+	librosa.output.write_wav(outname + '.lr.wav', x_lr, fs / rand)	
 	librosa.output.write_wav(outname + '.pr.wav', x_pr, fs)	
 
 	# save the spectrum
