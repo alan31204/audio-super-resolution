@@ -183,7 +183,7 @@ def eval(args):
 		# for batch in range(nb_batch):
 			# input, target = batch[0].to(device), batch[1].to(device)
 			X_val, Y_val = val['lr'], val['hr']
-			print(X_val.numpy()[0].shape)
+			# print(X_val.numpy()[0].shape)
 			# x_temp = X_val.numpy()[0]
 			# y_temp = Y_val.numpy()[0]
 			# x_S = computeSNR(x_temp,2048)
