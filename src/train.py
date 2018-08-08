@@ -195,6 +195,8 @@ def eval(args):
 			Y_val = Y_val.float()
 			X_val = Variable(X_val.cuda(), requires_grad=False).permute(0, 2, 1) # compute N, C L 
 			Y_val = Variable(Y_val.cuda(), requires_grad=False).permute(0, 2, 1)
+			print(X_val.size())
+			print(Y_val.size())
 			prediction = model(X_val)
 			mse = loss_function(prediction, Y_val)
 			psnr = 10 * log10(1 / mse.item())
