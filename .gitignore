@@ -9,3 +9,5 @@ src/models/__pycache__/*
 data/vctk/VCTK-Corpus/
 src/epochs/*.pth
 !src/epochs/.gitkeep
+*.wav
+*.raw
