@@ -90,6 +90,7 @@ parser.add_argument('--path',
 
 args = parser.parse_args()
 print(args)
+folder = 'epoch/'
 
 
 # model_name = args.model_name
@@ -159,7 +160,7 @@ def train(args):
 	plt.plot(iter_num, epoch_l)
 	plt.xlabel('number iteration')
 	plt.ylabel('Loss')
-	plt.savefig('epoch/loss.png')
+	plt.savefig(folder+'loss.png')
 
 
 def eval(args):
@@ -167,7 +168,7 @@ def eval(args):
 	# model = get_model(args, 0, args.r, from_ckpt=True, train=False)
  # 	model.load(args.logname) # from default checkpoint
 	num = 49
-	model = torch.load('epochs/' + "model_epoch_"+str(num)+".pth")
+	model = torch.load(folder + "model_epoch_"+str(num)+".pth")
 	avg_psnr = 0
 	avg_snr = 0
 	sum_x = 0
@@ -225,7 +226,7 @@ def eval(args):
 def checkpoint(epoch):
 	model_out_path = "model_epoch_{}.pth".format(epoch)
 	# model_out_path = 'model/' + model_name + ".pth"
-	torch.save(model, 'epoch/' + model_out_path)
+	torch.save(model, folder + model_out_path)
 	print("Checkpoint saved to {}".format(model_out_path))
 
 def computeSNR(x, n_fft=2048):
@@ -235,8 +236,8 @@ def computeSNR(x, n_fft=2048):
 	return snr
 
 
-train(args)
-# eval(args)
+# train(args)
+eval(args)
 
 
 # make and create model for training and evaluating
