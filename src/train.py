@@ -90,7 +90,7 @@ parser.add_argument('--path',
 
 args = parser.parse_args()
 print(args)
-folder = 'epoch/'
+folder = 'epochs/'
 
 
 # model_name = args.model_name
@@ -236,8 +236,8 @@ def computeSNR(x, n_fft=2048):
 	return snr
 
 
-# train(args)
-eval(args)
+train(args)
+# eval(args)
 
 
 # make and create model for training and evaluating
